@@ -1,0 +1,51 @@
+.grid-product {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); 
+  gap: 16px; 
+  margin-top: 20px;
+  padding: 0 10px; 
+}
+
+
+/* Contêiner principal */
+.categoria-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  /* 🔹 Alinha tudo à direita */
+  margin-bottom: 1rem;
+}
+
+
+.categoria-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding-bottom: 2px;
+}
+
+
+.categoria-dropdown {
+  width: 30%;              /* define metade da largura do container */
+  min-width: 250px;        /* largura mínima para não ficar pequeno demais */
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .grid-product {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-product {
+    grid-template-columns: repeat(4, 1fr); 
+  }
+
+  .categoria-container {
+    justify-content: center; 
+  }
+}

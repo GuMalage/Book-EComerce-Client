@@ -1,0 +1,76 @@
+.cards-produtos {
+    width: 100%;
+    max-width: 1150px;
+    margin: 0 auto 40px auto;
+    padding: 0 20px;
+}
+
+.cards-posicionamento {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    align-items: start;
+    justify-content: center;
+}
+
+.card {
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: white;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.card-hover a {
+    text-decoration: none;
+    color: black;
+    font-size: 1.2rem;
+}
+
+.preco-desconto-cor {
+    color: rgb(180, 181, 181);
+    font-size: 0.9rem;
+}
+
+.preco {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.estrelas {
+    font-size: 1.5rem;
+}
+
+.btn-adicionar-carrinho {
+    margin-top: auto;
+    background-color: #AA8ED6;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #AA8ED6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-adicionar-carrinho:hover {
+    background-color: #fff;
+    color: #c084fc;
+    border: 1px solid #AA8ED6;
+}

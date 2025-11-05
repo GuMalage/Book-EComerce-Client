@@ -1,0 +1,13 @@
+
+.form-address input {
+    width: 400px; 
+    padding: 10px;
+}
+
+
+@media screen and (max-width: 480px) {
+    .form-address input {
+        width: 100%; 
+        padding: 8px; 
+    }
+}
