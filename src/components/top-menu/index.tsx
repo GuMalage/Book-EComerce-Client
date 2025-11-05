@@ -16,8 +16,7 @@ const TopMenu: React.FC = () => {
     navigate("/login");
   };
 
-  const items: MenuItem[] = authenticated
-    ? [
+  const items: MenuItem[] =  [
         { label: "Home", command: () => navigate("/") },
         {
           label: "Categorias",
@@ -54,19 +53,12 @@ const TopMenu: React.FC = () => {
           command: () => navigate("/address"),
         }, 
       ]
-    : [];
 
   const start = (
     <div
       className="flex align-items-center gap-2 cursor-pointer"
       onClick={() => navigate("/")}
     >
-      <img
-        src=""
-        alt="Logo"
-        height={32}
-        style={{ objectFit: "contain" }}
-      />
     </div>
   );
 
@@ -87,18 +79,13 @@ const TopMenu: React.FC = () => {
     </div>
   );
 
+  
   return (
+
+    
     <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        width: "100%",
-        zIndex: 1000,
-        backgroundColor: "var(--surface-ground)",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-      }}
+      style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, backgroundColor: "#ccc", height: "60px" }}
+
       className="fixed top-0 left-0 w-full z-50"
     >
       <Menubar model={items} start={start} end={end} />
