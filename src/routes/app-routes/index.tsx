@@ -10,6 +10,7 @@ import { ProductListPage } from "@/pages/product-list";
 import { ProductFormPage } from "@/pages/product-form";
 import { NotFound } from "@/pages/not-found";
 import { AddressPage } from "@/pages/address-form";
+import { ProductPage } from "@/pages/product-page";
 
 
 
@@ -33,6 +34,8 @@ export function AppRoutes() {
 		    <Route  path="/categories/:id"  element={<CategoryFormPage  />}  />
 
         <Route  path="/products/new"  element={<ProductFormPage />}  />
+        <Route path="/product/:id" element={<ProductPage />} />
+
 		  
         <Route path="/address" element={<AddressPage/>} />
 

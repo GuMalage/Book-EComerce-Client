@@ -23,7 +23,6 @@ export const ProductListPage = () => {
   const { control, watch } = useForm();
   const category = watch("category");
 
-  // 🔹 Carrega produtos e categorias
   useEffect(() => {
     const loadData = async () => {
       try {

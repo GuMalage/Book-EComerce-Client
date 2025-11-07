@@ -1,12 +1,12 @@
 import type { IProduct, IResponse } from "@/commons/types";
 import { api } from "@/lib/axios";
 
-const categoryURL = "/products";
+const productURL = "/products";
 
-const save = async (category: IProduct): Promise<IResponse> => {
+const save = async (product: IProduct): Promise<IResponse> => {
   let response = {} as IResponse;
   try {
-    const data = await api.post(categoryURL, category);
+    const data = await api.post(productURL, product);
     response = {
       status: 200,
       success: true,
@@ -27,7 +27,7 @@ const save = async (category: IProduct): Promise<IResponse> => {
 const findAll = async (): Promise<IResponse> => {
   let response = {} as IResponse;
   try {
-    const data = await api.get(categoryURL);
+    const data = await api.get(productURL);
     response = {
       status: 200,
       success: true,
@@ -49,7 +49,7 @@ const findAll = async (): Promise<IResponse> => {
 const remove = async (id: number): Promise<IResponse> => {
   let response = {} as IResponse;
   try {
-    const data = await api.delete(`${categoryURL}/${id}`);
+    const data = await api.delete(`${productURL}/${id}`);
     response = {
       status: 200,
       success: true,
@@ -67,11 +67,10 @@ const remove = async (id: number): Promise<IResponse> => {
   return response;
 };
 
-
 const findById = async (id: number): Promise<IResponse> => {
   let response = {} as IResponse;
   try {
-    const data = await api.get(`${categoryURL}/${id}`);
+    const data = await api.get(`${productURL}/${id}`);
     response = {
       status: 200,
       success: true,
@@ -80,13 +79,13 @@ const findById = async (id: number): Promise<IResponse> => {
     };
   } catch (err: any) {
     response = {
-      status: err.response.status,
+      status: err.response?.status || 500,
       success: false,
       message: "Falha ao carregar o produto",
-      data: err.response.data,
+      data: err.response?.data || null,
     };
   }
-  return response;
+  return response; 
 };
 
 const ProductService = {
