@@ -1,0 +1,23 @@
+.checkout-container {
+  width: 40%;
+  margin: 0 auto; /* centraliza horizontalmente */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Garante que os blocos internos ocupem toda a largura dos 40% */
+.checkout-container > div,
+.checkout-container .card,
+.checkout-container .border {
+  width: 100%;
+}
+
+/* Centraliza os botões dentro da área do checkout */
+.checkout-container .text-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}

@@ -11,6 +11,8 @@ import { ProductFormPage } from "@/pages/product-form";
 import { NotFound } from "@/pages/not-found";
 import { AddressPage } from "@/pages/address-form";
 import { ProductPage } from "@/pages/product-page";
+import { CartPage } from "@/pages/cart-page";
+import CheckoutPage from "@/pages/checkout-page";
 
 
 
@@ -38,6 +40,9 @@ export function AppRoutes() {
 
 		  
         <Route path="/address" element={<AddressPage/>} />
+        <Route path="/cart" element={<CartPage/>} />
+
+        <Route path="/checkout" element={<CheckoutPage/>} />
 
           <Route path="*" element={<NotFound />} />
         </Route>

@@ -9,6 +9,8 @@ import "primeflex/primeflex.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css"; 
 import "primereact/resources/primereact.min.css"; 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "primereact/resources/themes/lara-light-blue/theme.css";
+
 
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext.tsx";

@@ -5,7 +5,7 @@ import {
   faYoutube,
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
-import "./index.css";
+import "./footer-component.css";
 import mastercard from "@/assets/mastercard@2x.png";
 import visa from "@/assets/visa@2x.png";
 import boleto from "@/assets/boleto@2x.png";

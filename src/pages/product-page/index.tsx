@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import type { IProduct } from "@/commons/types";
 import { Toast } from "primereact/toast";
 import ProductService from "@/services/Product-service";
-import "./index.css"
+import { confirmDialog } from "primereact/confirmdialog";
+import { toastRef } from "@/App";
+import "./product-page.css";
 
 export const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,10 +21,9 @@ export const ProductPage = () => {
         if (!id) throw new Error("ID do produto não informado.");
 
         const prodRes = await findById(Number(id));
-        console.log("🔍 Retorno do findById:", prodRes);
 
         if (prodRes && prodRes.status === 200 && prodRes.data) {
-          setProduct(prodRes.data);
+         setProduct(prodRes.data as IProduct);
         } else {
           throw new Error(prodRes?.message || "Produto não encontrado.");
         }
@@ -39,8 +40,61 @@ export const ProductPage = () => {
     };
 
     loadData();
-  }, [id]); 
+  }, [id]);
 
+  const addToCart = (product: IProduct) => {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const alreadyInCartIndex = cart.findIndex(
+        (item: IProduct) => item.id === product.id
+      );
+  
+      if (alreadyInCartIndex !== -1) {
+        confirmDialog({
+          header: "Produto já no carrinho",
+          message: (
+            <div style={{ lineHeight: 1.6 }}>
+              O produto <strong>{product.name}</strong> já está no seu carrinho. <br />
+              Deseja adicionar <strong>mais uma unidade</strong>?
+            </div>
+          ),
+          icon: "pi pi-shopping-cart",
+          acceptLabel: "Adicionar mais 1",
+          rejectLabel: "Cancelar",
+          acceptClassName: "p-button-success",
+          rejectClassName: "p-button-text",
+          accept: () => {
+            cart[alreadyInCartIndex].cartQuantity += 1;
+            localStorage.setItem("cart", JSON.stringify(cart));
+            toastRef.current?.show({
+              severity: "success",
+              summary: "Carrinho atualizado",
+              detail: `Adicionada mais uma unidade de "${product.name}".`,
+              life: 3000,
+            });
+          },
+          reject: () => {
+            toastRef.current?.show({
+              severity: "info",
+              summary: "Operação cancelada",
+              detail: "Nenhuma alteração foi feita no carrinho.",
+              life: 2500,
+            });
+          },
+        });
+        return;
+      }
+  
+      product.cartQuantity = 1;
+      cart.push(product);
+      localStorage.setItem("cart", JSON.stringify(cart));
+  
+      toastRef.current?.show({
+        severity: "success",
+        summary: "Adicionado ao carrinho",
+        detail: "O produto foi adicionado ao seu carrinho com sucesso!",
+        life: 3000,
+      });
+    };
 
   if (loading) return <p>Carregando...</p>;
   if (!product) return <p>Produto não encontrado.</p>;
@@ -81,7 +135,11 @@ export const ProductPage = () => {
           </div>
 
           <div className="acoes">
-            <button data-id={product.id} className="btn-adicionar-carrinho w-100 mt-2">
+            <button
+              data-id={product.id}
+              className="btn-adicionar-carrinho w-100 mt-2"
+              onClick={() => addToCart(product)}
+            >
               Adicionar ao Carrinho
             </button>
           </div>

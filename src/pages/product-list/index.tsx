@@ -6,7 +6,7 @@ import type { IProduct, ICategory } from "@/commons/types";
 import { ProductCard } from "@/components/product-card";
 import { Controller, useForm } from "react-hook-form";
 import { Dropdown } from "primereact/dropdown";
-import "./index.css";
+import "./product-list.css";
 
 export const ProductListPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -70,77 +70,85 @@ export const ProductListPage = () => {
   }, [category]);
 
   return (
-    <main className="container py-4">
-      <Toast ref={toast} />
+    <main className="product-page">
+  <Toast ref={toast} />
 
-      <div className="categoria-container">
-        <label className="categoria-label">Categoria</label>
-        <Controller
-          name="category"
-          control={control}
-          render={({ field }) => (
-            <Dropdown
-              {...field}
-              options={categories}
-              optionLabel="name"
-              placeholder="Selecione uma categoria"
-              className="categoria-dropdown"
-              value={field.value}
-              onChange={(e) => field.onChange(e.value)}
-            />
-          )}
+  {/* Seção de Categoria */}
+  <div className="category-section">
+    <label className="categoria-label">Categoria</label>
+    <Controller
+      name="category"
+      control={control}
+      render={({ field }) => (
+        <Dropdown
+          {...field}
+          options={categories}
+          optionLabel="name"
+          placeholder="Selecione uma categoria"
+          className="categoria-dropdown"
+          value={field.value}
+          onChange={(e) => field.onChange(e.value)}
         />
-      </div>
-
-      <h2 className="mb-4 text-center">Lista de Produtos Encontrados</h2>
-
-      {loading ? (
-        <p className="text-center">Carregando...</p>
-      ) : filteredProducts.length === 0 ? (
-        <p className="text-center text-muted">
-          Nenhum produto encontrado para esta categoria.
-        </p>
-      ) : (
-        <>
-          <div className="grid-product">
-            {paginatedData.map((product) => (
-              <div key={product.id}>
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
-
-          <div className="d-flex justify-content-center align-items-center gap-2 mt-4">
-            <button
-              className="btn btn-secondary btn-sm"
-              onClick={() => setCurrentPage(currentPageSafe - 1)}
-              disabled={currentPageSafe <= 1 || totalPages === 0}
-            >
-              Anterior
-            </button>
-
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i + 1}
-                className={`btn btn-sm ${
-                  currentPageSafe === i + 1 ? "btn-danger" : "btn-outline-secondary"
-                }`}
-                onClick={() => setCurrentPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            ))}
-
-            <button
-              className="btn btn-secondary btn-sm"
-              onClick={() => setCurrentPage(currentPageSafe + 1)}
-              disabled={currentPageSafe >= totalPages || totalPages === 0}
-            >
-              Próximo
-            </button>
-          </div>
-        </>
       )}
-    </main>
+    />
+  </div>
+
+  {/* Título */}
+  <h2 className="title">Lista de Produtos Encontrados</h2>
+
+
+  {loading ? (
+    <p className="text-center">Carregando...</p>
+  ) : filteredProducts.length === 0 ? (
+    <p className="text-center text-muted">
+      Nenhum produto encontrado para esta categoria.
+    </p>
+  ) : (
+    <>
+    <section className="cards-produtos">
+            <div className="cards-posicionamento" id="produtosContainer">
+             {paginatedData.map((product) => (
+          <div key={product.id}>
+            <ProductCard product={product} />
+          </div>
+        ))}
+            </div>
+          </section>
+    
+
+      {/* Paginação */}
+      <div className="pagination">
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => setCurrentPage(currentPageSafe - 1)}
+          disabled={currentPageSafe <= 1 || totalPages === 0}
+        >
+          Anterior
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            className={`btn btn-sm ${
+              currentPageSafe === i + 1 ? "btn-danger" : "btn-outline-secondary"
+            }`}
+            onClick={() => setCurrentPage(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
+
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => setCurrentPage(currentPageSafe + 1)}
+          disabled={currentPageSafe >= totalPages || totalPages === 0}
+        >
+          Próximo
+        </button>
+      </div>
+    </>
+  )}
+</main>
+
   );
 };

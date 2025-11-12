@@ -52,6 +52,10 @@ const TopMenu: React.FC = () => {
           label: "Endereço",
           command: () => navigate("/address"),
         }, 
+         {
+          label: "Cart",
+          command: () => navigate("/cart"),
+        }, 
       ]
 
   const start = (

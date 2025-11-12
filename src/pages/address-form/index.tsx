@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { IAddress } from "@/commons/types";
 import AddressService from "@/services/Address-service";
 import { Button, Form, Alert } from "react-bootstrap";
-import "./index.css";
+import "./address-form.css";
 
 export function AddressPage() {
   const [form, setForm] = useState<IAddress>({

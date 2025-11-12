@@ -3,7 +3,7 @@ import type { IProduct } from "@/commons/types";
 import { ProductCard } from "@/components/product-card";
 import ProductService from "@/services/Product-service";
 import "./card.css";
-import "./index.css";
+import "./home.css";
 
 
 export const HomePage = () => {

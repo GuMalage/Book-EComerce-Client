@@ -37,7 +37,8 @@ export  interface  ICategory {
 }
 
 export interface IProduct {
-  id?: number;
+  cartQuantity: number;
+  id: number;
   name: string;
   description: string;
   price: number;
@@ -59,6 +60,10 @@ export interface IOrder {
     id?: number;
     itemsList: {productId: number, quantity: number}[];
     total: number;
+    paymentType: String ;
+    shippingType: String ;
+    addressId: number ;
+    shipping: number;
 }
 
 export interface IResponseOrder {
@@ -81,3 +86,25 @@ export interface ICartItem {
     category: ICategory;
 }
 
+export interface ICartItem {
+    id?: number;
+    name: string;
+    brand: string;
+    description: string;
+    price: number;
+    details: string;
+    quantity: number;
+    ingredients: string;
+    image: string;
+    category: ICategory;
+}
+
+export interface ShippingOption {
+    id: number;
+    name: string;
+    price: string;
+    custom_price: string;
+    discount: string;
+    currency: string;
+    delivery_time: number;
+}
