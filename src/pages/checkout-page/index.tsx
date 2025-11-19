@@ -1,311 +1,226 @@
-// CheckoutPage.tsx
-import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
 import OrderService from "@/services/Order-service";
 import AddressService from "@/services/Address-service";
-import ShippingCalculator from "@/components/shipping-calculator";
-import type { IOrder, IProduct, ShippingOption } from "@/commons/types";
-import "./checkout-page.css"
-
-interface Address {
-  id: number;
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-}
+import { useNavigate } from "react-router-dom";
+import type { IOrder, IProduct, IAddress } from "@/commons/types";
+import { Toast } from "primereact/toast";
+import "./checkout-page.css";
 
 const CheckoutPage = () => {
-  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [addresses, setAddresses] = useState<IAddress[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
-  const [selectedAddressZip, setSelectedAddressZip] = useState<string>("");
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
-  const [installments, setInstallments] = useState<number>(1);
-  const [pendingOrder, setPendingOrder] = useState(false);
-  const [orderError, setOrderError] = useState<string | null>(null);
-  const [orderSuccess, setOrderSuccess] = useState<string | null>(null);
-  const [cartItems, setCartItems] = useState<IProduct[]>([]);
-  const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
-  const [selectedShipping, setSelectedShipping] = useState<ShippingOption | null>(null);
 
+  const [paymentMethod, setPaymentMethod] = useState("PIX");
+
+  const [shippingType, setShippingType] = useState("");
+  const [shippingPrice, setShippingPrice] = useState(0);
+
+  const toast = useRef<Toast>(null);
   const navigate = useNavigate();
 
+  // Carrega carrinho
   useEffect(() => {
-    loadAddresses();
-    loadCartItems();
+    const cartItems: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");
+    setProducts(cartItems);
   }, []);
 
-  const loadAddresses = async () => {
-  try {
-    const response = await AddressService.findAll();
-    if (response) {
-      setAddresses(response as unknown as Address[]); 
-    }
-  } catch (error) {
-    console.error("Erro ao carregar endereços:", error);
-  }
-};
+  // Carrega endereços
+  useEffect(() => {
+    AddressService.getByUser().then((res) => setAddresses(res || []));
+  }, []);
 
-
-  const loadCartItems = () => {
-    const cartString = localStorage.getItem("cart");
-    if (cartString) {
-      const parsedCart: IProduct[] = JSON.parse(cartString);
-      setCartItems(parsedCart);
-    }
+  const handleSelectAddress = (id: number) => {
+    setSelectedAddress(id);
   };
 
-  const handleSelectAddress = (id: number | undefined, zip: string) => {
-    setSelectedAddress(id ?? null);
-    setSelectedAddressZip(zip);
-  };
-
-  const handleFinishOrder = async () => {
-    if (!selectedAddress || !paymentMethod || !selectedShipping) {
-      alert("Selecione endereço, forma de envio e método de pagamento");
-      return;
-    }
-
-    if (!cartItems.length) {
-      alert("Não há item no carrinho");
-      return;
-    }
-
-    const orderItems = cartItems.map((item) => ({
-      productId: item.id,
-      quantity: item.cartQuantity,
-    }));
-
-    const subtotal = cartItems.reduce(
-      (acc, item) => acc + item.price * item.cartQuantity,
-      0
-    );
-    const total = subtotal + parseFloat(selectedShipping.price || "0");
-
-    const order: IOrder = {
-      shipping: parseFloat(selectedShipping.price || "0"),
-      paymentType: paymentMethod.toUpperCase().replace(" ", "_"),
-      addressId: selectedAddress,
-      itemsList: orderItems,
-      total: total,
-      shippingType: selectedShipping.name, // ✅ salva o tipo de envio
-    };
-
-    setPendingOrder(true);
-    setOrderError(null);
-    setOrderSuccess(null);
-
-    try {
-      const response = await OrderService.save(order);
-      if (response.status === 200 || response.status === 201) {
-        setOrderSuccess("Pedido realizado com sucesso");
-        localStorage.removeItem("cart");
-        navigate("/profile", { state: { order: response.data } });
-      } else {
-        setOrderError("Falha ao finalizar o pedido.");
-      }
-    } catch (error) {
-      console.error("Erro ao finalizar pedido:", error);
-      setOrderError("Falha ao finalizar o pedido.");
-    } finally {
-      setPendingOrder(false);
-    }
-  };
-
-  const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.cartQuantity,
+  const subtotal = products.reduce(
+    (acc, product) => acc + product.price * product.cartQuantity,
     0
   );
-  const shippingCost = parseFloat(selectedShipping?.price || "0");
-  const total = subtotal + shippingCost;
+
+  const finalTotal = subtotal + shippingPrice;
+
+  const handleOrder = async () => {
+    if (!selectedAddress) {
+      toast.current?.show({
+        severity: "warn",
+        summary: "Atenção",
+        detail: "Selecione um endereço",
+        life: 2000,
+      });
+      return;
+    }
+
+    if (!shippingType) {
+      toast.current?.show({
+        severity: "warn",
+        summary: "Atenção",
+        detail: "Selecione um método de envio",
+        life: 2000,
+      });
+      return;
+    }
+
+    if (!products.length) return;
+
+    const order: IOrder = {
+      itemsList: products.map((product) => ({
+        productId: product.id,
+        quantity: product.cartQuantity,
+      })),
+      totalPrice: finalTotal,
+      paymentType: paymentMethod.toUpperCase(),
+      shippingType,
+      addressId: Number(selectedAddress),
+    };
+
+    const response = await OrderService.save(order);
+
+    // 🚀 CORRETO AGORA — ANALISA STATUS HTTP REAL
+    if (response && response.httpStatus === 200) {
+      toast.current?.show({
+        severity: "success",
+        summary: "Pedido criado",
+        detail: "Seu pedido foi confirmado!",
+        life: 2000,
+      });
+
+      localStorage.removeItem("cart");
+      setTimeout(() => navigate("/profile"), 1500);
+    } else {
+      toast.current?.show({
+        severity: "error",
+        summary: "Erro",
+        detail: "Erro ao finalizar pedido!",
+        life: 2500,
+      });
+    }
+  };
+
+  if (!products.length && !addresses.length) {
+    return (
+      <main className="checkout-container py-4">
+        <p>Carregando...</p>
+      </main>
+    );
+  }
 
   return (
     <main className="checkout-container py-4">
+      <Toast ref={toast} />
       <h1 className="fw-bold mb-4">Finalização da compra</h1>
 
-      {/* Endereços */}
-      <div className="mb-4">
+      {/* ENDEREÇOS */}
+      <div className="checkout-box">
         <h5>Selecione o endereço de entrega</h5>
-        <div
-          style={{
-            maxHeight: "200px",
-            overflowY: "auto",
-            border: "1px solid #ccc",
-            padding: "10px",
-          }}
-        >
-          {addresses.length > 0 ? (
-            addresses.map((addr) => (
-              <div
-                key={addr.id}
-                onClick={() => handleSelectAddress(addr.id, addr.zip)}
-                style={{
-                  padding: "10px",
-                  borderRadius: "5px",
-                  marginBottom: "5px",
-                  cursor: "pointer",
-                  background:
-                    selectedAddress === addr.id ? "#eee" : "#fff",
-                  border: "1px solid #ccc",
-                }}
-              >
-                <p className="m-0">
-                  {addr.street}, {addr.city}, {addr.state} - {addr.zip}
-                </p>
-              </div>
-            ))
-          ) : (
-            <p>Nenhum endereço cadastrado</p>
-          )}
-        </div>
-        <button
-          className="btn btn-danger mt-3"
-          onClick={() => navigate("/address")}
-        >
-          Adicionar endereço
-        </button>
+        {addresses.length === 0 && <p>Nenhum endereço cadastrado.</p>}
+
+        {addresses.map((address: IAddress) => (
+          <div
+            key={address.id ?? Math.random()}
+            onClick={() => address.id && handleSelectAddress(address.id)}
+            className={`address-item ${
+              selectedAddress === address.id ? "selected" : ""
+            }`}
+          >
+            <p className="m-0">
+              {address.street}, {address.houseNumber} — {address.city}
+            </p>
+            <small>CEP: {address.zip}</small>
+          </div>
+        ))}
       </div>
 
-   
-<div className="mb-4">
-  <h5>Forma de envio</h5>
+      {/* FRETE */}
+      <div className="checkout-box">
+        <h5>Forma de envio</h5>
 
-  <div className="border rounded p-3">
-    <select
-      className="form-select"
-      value={selectedShipping?.name || ""}
-      onChange={(e) => {
-        const val = e.target.value;
+        {!selectedAddress && <p>Selecione um endereço antes.</p>}
 
-        const option =
-          val === "PAC"
-            ? { id: 1, name: "PAC", price: "15.00", delivery_time: 5 }
-            : val === "SEDEX"
-            ? { id: 2, name: "SEDEX", price: "25.00", delivery_time: 2 }
-            : val === "Retirada"
-            ? { id: 3, name: "Retirada", price: "0.00", delivery_time: 0 }
-            : null;
-
-        setSelectedShipping(option);
-      }}
-    >
-      <option value="">Selecione...</option>
-      <option value="PAC">PAC - R$15,00 (5 dias úteis)</option>
-      <option value="SEDEX">SEDEX - R$25,00 (2 dias úteis)</option>
-      <option value="Retirada">Retirada na loja - Grátis</option>
-    </select>
-  </div>
-</div>
-
-
-
-
-
-
-      {/* Método de pagamento */}
-      <div className="mb-4">
-        <h5>Método de pagamento</h5>
-        <div className="border rounded p-3">
+        {selectedAddress && (
           <select
             className="form-select"
-            value={paymentMethod}
+            value={shippingType}
             onChange={(e) => {
-              setPaymentMethod(e.target.value);
-              if (e.target.value === "credit card") setInstallments(1);
+              const value = e.target.value;
+              setShippingType(value);
+
+              if (value === "PAC") setShippingPrice(10);
+              else if (value === "SEDEX") setShippingPrice(20);
+              else if (value === "RETIRADA") setShippingPrice(0);
             }}
           >
-            <option value="">Selecione...</option>
-            <option value="credit card">Cartão de crédito</option>
-            <option value="bank transfer">Pix</option>
+            <option value="">Selecione</option>
+            <option value="PAC">PAC — R$ 10,00 (7 dias)</option>
+            <option value="SEDEX">SEDEX — R$ 20,00 (3 dias)</option>
+            <option value="RETIRADA">Retirada no local — R$ 0,00</option>
           </select>
-
-          {paymentMethod === "credit card" && (
-            <div className="mt-3">
-              <label htmlFor="installments" className="form-label">
-                Número de parcelas
-              </label>
-              <select
-                id="installments"
-                className="form-select"
-                value={installments}
-                onChange={(e) => setInstallments(Number(e.target.value))}
-              >
-                {[...Array(10)].map((_, index) => (
-                  <option key={index + 1} value={index + 1}>
-                    {index + 1}x R${(total / (index + 1)).toFixed(2)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-        </div>
+        )}
       </div>
 
-      {/* Itens do pedido */}
-      <div className="card mb-4">
-        <div className="card-header bg-light">
+      {/* PAGAMENTO */}
+      <div className="checkout-box">
+        <h5>Método de pagamento</h5>
+        <select
+          className="form-select"
+          value={paymentMethod}
+          onChange={(e) => setPaymentMethod(e.target.value)}
+        >
+          <option value="CREDITO">Crédito</option>
+          <option value="DEBITO">Débito</option>
+          <option value="PIX">PIX</option>
+        </select>
+      </div>
+
+      {/* ITENS */}
+      <div className="checkout-card">
+        <div className="checkout-card-header">
           <h5 className="m-0">Itens do pedido</h5>
         </div>
-        <div className="card-body">
-          {cartItems.length > 0 ? (
-            cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="d-flex align-items-center mb-3 border-bottom pb-2"
-              >
-                <img
-                  src={item.img as string}
-                  alt={item.name}
-                  style={{ width: "50px", height: "50px", objectFit: "cover" }}
-                  className="me-3 rounded"
-                />
-                <div>
-                  <strong>{item.name}</strong>
-                  <p className="mb-0">Preço: R${item.price.toFixed(2)}</p>
-                  <p className="mb-0">Quantidade: {item.cartQuantity}</p>
-                </div>
+        <div className="checkout-card-body">
+          {products.length === 0 && <p>Seu carrinho está vazio.</p>}
+
+          {products.map((item) => (
+            <div key={item.id} className="checkout-item">
+              <img src={item.img as string} alt={item.name} />
+              <div>
+                <strong>{item.name}</strong>
+                <p className="mb-0">Preço: R${item.price.toFixed(2)}</p>
+                <p className="mb-0">Qtd: {item.cartQuantity}</p>
               </div>
-            ))
-          ) : (
-            <p>Sem itens no carrinho</p>
-          )}
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Resumo */}
-      <div className="border rounded p-3 mb-4">
+      {/* RESUMO */}
+      <div className="checkout-box">
         <h5>Resumo do pedido</h5>
-        <div className="d-flex justify-content-between">
+
+        <div className="summary-row">
           <span>Subtotal:</span>
           <span>R${subtotal.toFixed(2)}</span>
         </div>
-        <div className="d-flex justify-content-between">
+
+        <div className="summary-row">
           <span>Frete:</span>
-          <span>R${shippingCost.toFixed(2)}</span>
+          <span>R${shippingPrice.toFixed(2)}</span>
         </div>
+
         <hr />
-        <div className="d-flex justify-content-between fw-bold">
+
+        <div className="summary-row summary-total">
           <span>Total:</span>
-          <span>R${total.toFixed(2)}</span>
+          <span>R${finalTotal.toFixed(2)}</span>
         </div>
       </div>
 
-      {/* Botões */}
-      <div className="text-center">
-        <NavLink to="/" className="btn btn-outline-danger me-3">
-          Continuar comprando
-        </NavLink>
-        <button
-          className="btn btn-danger btn-lg"
-          onClick={handleFinishOrder}
-          disabled={pendingOrder}
-        >
-          {pendingOrder ? "Finalizando..." : "Finalizar pedido"}
+      <div className="checkout-actions">
+        <button className="btn btn-danger btn-lg" onClick={handleOrder}>
+          Finalizar pedido
         </button>
       </div>
-
-      {orderError && <p className="text-danger mt-3">{orderError}</p>}
-      {orderSuccess && <p className="text-success mt-3">{orderSuccess}</p>}
     </main>
   );
 };

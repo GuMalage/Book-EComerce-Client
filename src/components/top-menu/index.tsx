@@ -17,22 +17,7 @@ const TopMenu: React.FC = () => {
   };
 
   const items: MenuItem[] =  [
-        { label: "Home", command: () => navigate("/") },
-        {
-          label: "Categorias",
-          items: [
-            {
-              label: "Listar",
-              icon: "pi pi-list",
-              command: () => navigate("/categories"),
-            },
-            {
-              label: "Novo",
-              icon: "pi pi-plus",
-              command: () => navigate("/categories/new"),
-            },            
-          ],
-        },    
+        { label: "Home", command: () => navigate("/") }, 
          {
           label: "Produtos",
           items: [
@@ -40,11 +25,6 @@ const TopMenu: React.FC = () => {
               label: "Listar",
               icon: "pi pi-list",
               command: () => navigate("/products"),
-            },
-            {
-              label: "Novo",
-              icon: "pi pi-plus",
-              command: () => navigate("/products/new"),
             },
           ],
         },      
@@ -55,6 +35,10 @@ const TopMenu: React.FC = () => {
          {
           label: "Cart",
           command: () => navigate("/cart"),
+        }, 
+         {
+          label: "Profile",
+          command: () => navigate("/profile"),
         }, 
       ]
 

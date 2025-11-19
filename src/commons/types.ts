@@ -48,29 +48,29 @@ export interface IProduct {
 
 export interface IAddress {
   id?: number;
-  zip: String;
+  zip: string;
   street: string;
   city: string;
   houseNumber: string;
   complement: string;
-  cep: string;
+  
 }
 
 export interface IOrder {
     id?: number;
     itemsList: {productId: number, quantity: number}[];
-    total: number;
+    totalPrice: number;
     paymentType: String ;
     shippingType: String ;
     addressId: number ;
-    shipping: number;
 }
 
-export interface IResponseOrder {
+export interface IOrderResponse {
     id?: number;
-    orderDate: string;
-    itemsList: {productId: number, productPrice: number, quantity: number, productName: String, totalPriceItems: number}[];
-    total: number;
+    dateOrder: Date;
+    itemsList: {productId: number, productPrice: number, quantity: number, productName: String, totalPriceItems: number, urlImage: String}[];
+    addressId: number,
+    totalPrice: number;
 }
 
 export interface ICartItem {
@@ -99,12 +99,3 @@ export interface ICartItem {
     category: ICategory;
 }
 
-export interface ShippingOption {
-    id: number;
-    name: string;
-    price: string;
-    custom_price: string;
-    discount: string;
-    currency: string;
-    delivery_time: number;
-}

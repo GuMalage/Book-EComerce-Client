@@ -12,7 +12,6 @@ export function AddressPage() {
     city: "",
     houseNumber: "",
     complement: "",
-    cep: "",
   });
 
   const [pendingApiCall, setPendingApiCall] = useState(false);

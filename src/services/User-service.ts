@@ -1,7 +1,8 @@
 import { api } from "@/lib/axios.ts";
 import type { IUserLogin } from "@/commons/types";
 
-const userURL = "/user";
+const userURL = "/users";
+
 
 
 const updateUser = async (user: IUserLogin): Promise<any> => {
@@ -13,7 +14,7 @@ const updateUser = async (user: IUserLogin): Promise<any> => {
 };
 
 const UserService = {
-    updateUser,
+    updateUser
 };
 
 export default UserService;
