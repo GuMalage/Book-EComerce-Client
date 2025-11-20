@@ -1,275 +1,206 @@
-html,
-body {
-  overflow-x: hidden;
+html, body {
+    overflow-x: hidden;
 }
 
 footer {
-  width: 100%;
-  background-color: #fff;
+    width: 100%;
+    background-color: var(--color-surface-card); 
+    font-family: var(--font-family-standard);
+    border-top: 1px solid var(--color-neutral-light); 
+}
+
+
+.linha-rodape {
+    margin: 0 100px;
+    border: none;
+    border-top: 1px solid var(--color-neutral-light);
+    opacity: 0.5;
 }
 
 .rodape {
-  display: flex;
-  justify-content: space-between;
-  background-color: #fff;
-  padding: 20px 40px;
-  flex-wrap: wrap;
-  width: 100%;
-  box-sizing: border-box;
-  padding-left: 100px;
-  padding-right: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 30px 40px; 
+    flex-wrap: wrap;
+    box-sizing: border-box;
 }
 
+
 .informacoes-contato {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .politicas {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .politicas img {
-  height: 65px;
-  width: 65px;
+    height: 60px; 
+    width: auto;
 }
 
 .politica-hover a {
-  font-size: 0.9rem;
-  text-decoration: none;
-  color: black;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--color-neutral-dark);
+    font-weight: 500;
+    transition: color var(--transition-standard);
 }
 
 .politica-hover:hover a {
-  color: #AA8ED6;
+    color: var(--color-primary-medium); 
 }
 
 .forma-pagamento {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding-top: 15px; 
+    border-top: 1px solid var(--color-neutral-light);
 }
 
 .forma-pagamento img {
-  height: 25px;
-  width: 37px;
+    height: 28px; 
+    width: auto;
+    opacity: 0.85; 
+    transition: opacity var(--transition-standard);
+}
+
+.forma-pagamento img:hover {
+    opacity: 1;
 }
 
 .redes-sociais {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; 
+    margin-top: 0;
 }
 
 .redes-sociais h2 {
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: rgb(42, 39, 39);
-  margin-bottom: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .icones-flex {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .icones a {
-  font-size: 1.25rem;
-  color: #AA8ED6;
-  padding: 6px;
-  border-radius: 30%;
-  transition: background-color 0.3s, color 0.3s;
+    font-size: 1.1rem; 
+    color: var(--color-primary-medium); 
+    background-color: transparent;
+    border: 2px solid var(--color-accent-light); 
+    width: 34px;
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%; 
+    transition: var(--transition-standard);
 }
 
 .icones a:hover {
-  background-color: #AA8ED6;
-  color: #fff;
+    background-color: var(--color-action-hover); 
+    color: var(--color-surface-card);
+    border-color: var(--color-action-hover);
 }
 
+
 .direitos-autorais {
-  text-align: center;
-  width: 100%;
+    width: 100%;
+    text-align: center;
+    padding: 15px 20px;
+    background-color: var(--color-neutral-lighter);
+    border-top: 1px solid var(--color-neutral-light);
 }
 
 .direitos-autorais-estilo h3 {
-  font-size: 0.9rem;
-  font-weight: normal;
-}
-
-.cadastro-email {
-  text-align: center;
-  padding: 30px 20px;
-}
-
-.cadastro-email p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-}
-
-.email-desconto {
-  display: inline;
-  align-items: center;
-  padding-bottom: 12px;
-  border-bottom: 1px solid black;
-}
-
-.cadastro-email .email-desconto label {
-  margin-bottom: 5px;
-  margin-right: 15px;
-  font-size: 0.9rem;
-}
-
-.cadastro-email .email-desconto input[type="email"] {
-  padding: 10px;
-  border: none;
-  width: 300px;
-  max-width: 100%;
-  font-size: 0.9rem;
-  outline: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--color-neutral-medium);
+    margin: 0;
 }
 
 .destaque-texto {
-  color: #AA8ED6;
+    color: var(--color-primary-dark);
+    font-weight: 600;
 }
 
-.linha-rodape {
-  margin-left: 100px;
-  margin-right: 100px;
+
+@media (max-width: 992px) {
+    .rodape {
+        padding: 30px 20px;
+        justify-content: space-around;
+    }
+
+    .linha-rodape {
+        margin: 0 20px;
+    }
+    
+    .redes-sociais {
+        align-items: flex-start; 
+        width: 100%;
+        margin-top: 25px;
+    }
 }
 
-.banner-rodape {
-  position: relative;
-}
+@media (max-width: 600px) {
+    .rodape {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding: 30px 15px;
+    }
 
-.banner-rodape img {
-  margin-top: 50px;
-  width: 100%;
-  height: 25vh;
-  object-fit: cover;
-  display: block;
-}
+    .linha-rodape {
+        margin: 0 15px;
+    }
 
-.banner-rodape div {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 10px;
-  width: 30%;
-  max-width: 400px;
-  min-width: 200px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
-  text-align: center;
-}
+    .informacoes-contato {
+        align-items: center;
+        width: 100%;
+    }
 
-.texto-banner-rodape a {
-  text-decoration: none;
-  color: black;
-  font-size: 1rem;
-}
+    .politicas {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .politicas img {
+        height: 50px;
+    }
 
-.texto-banner-rodape a:hover {
-  color: #AA8ED6;
-}
+    .forma-pagamento {
+        justify-content: center;
+        width: 100%;
+        border-top: none; 
+        padding-top: 0;
+        margin-top: 10px;
+    }
 
-@media (max-width: 768px) {
-  footer {
-    padding: 0;
-  }
-
-  .rodape {
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 15px;
-  }
-
-  .politicas {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .politicas img {
-    width: 30%;
-    height: 30%;
-  }
-
-  .icones-flex {
-    justify-content: center;
-  }
-
-  .redes-sociais {
-    align-items: center;
-    margin: 25px;
-    margin-bottom: 0;
-  }
-
-  .direitos-autorais {
-    margin: 20px 10px;
-  }
-
-  .cadastro-email p {
-    font-size: 1rem;
-  }
-
-  .forma-pagamento {
-    justify-content: center;
-  }
-
-  .cadastro-email .email-desconto label {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    margin-right: 0;
-    font-size: 0.9rem;
-    background-color: #AA8ED6;
-    padding: 7px;
-    border-radius: 4px;
-    color: #fff;
-  }
-
-  .email-desconto {
-    border-bottom: none;
-  }
-
-  .cadastro-email .email-desconto input[type="email"] {
-    text-align: center;
-    border-radius: 0;
-    border-bottom: 1px solid black;
-  }
-
-  .linha-rodape {
-    margin-left: 25px;
-    margin-right: 25px;
-  }
-
-  .banner-rodape img {
-    height: 15vh;
-  }
-
-  .banner-rodape div {
-    width: 70%;
-  }
-
-  .texto-banner-rodape a {
-    font-size: 1.1rem;
-  }
-
-}
-
-@media (max-width: 480px) {
-  .banner-rodape div {
-    width: 85%;
-  }
-
+    .redes-sociais {
+        align-items: center;
+        width: 100%;
+        margin-top: 10px;
+    }
 }

@@ -1,77 +1,279 @@
+
+
+.product-page {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 20px;
+    font-family: var(--font-family-standard);
+    margin-top: 100px;
+}
+
+.title {
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--color-neutral-light);
+    padding-bottom: 10px;
+}
+
+/* Estilos de Carregamento/Vazio */
+.product-page > .text-center {
+    padding: 30px;
+    font-size: 1.1rem;
+    color: var(--color-neutral-medium);
+}
+
+/* ======================================= */
+/* 3. SEÇÃO DE FILTRO (CATEGORIA)          */
+/* ======================================= */
+
+.category-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 15px 20px;
+    background: var(--color-surface-card);
+    border-radius: 10px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.categoria-label {
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* Estilo do Dropdown do PrimeReact */
+.categoria-dropdown {
+    width: 300px;
+    /* Adaptação aos inputs do design system */
+    border: 1px solid var(--color-neutral-light) !important;
+    border-radius: 8px !important;
+    background-color: var(--color-surface-card) !important;
+    color: var(--color-neutral-dark) !important;
+    box-shadow: none !important;
+    transition: all 0.3s ease;
+}
+
+.categoria-dropdown:hover {
+    border-color: var(--color-accent-light) !important;
+}
+
+.categoria-dropdown.p-focus {
+    border-color: var(--color-primary-medium) !important;
+    box-shadow: 0 0 0 0.2rem rgba(74, 103, 133, 0.25) !important;
+}
+
+/* ======================================= */
+/* 4. GRID DE PRODUTOS                     */
+/* ======================================= */
+
 .cards-produtos {
     width: 100%;
-    max-width: 1150px;
     margin: 0 auto 40px auto;
-    padding: 0 20px;
+    padding: 0; /* Removido padding, pois já está no .product-page */
 }
 
 .cards-posicionamento {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    align-items: start;
-    justify-content: center;
+    /* Ajustado para minmax 250px para cards maiores */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px; /* Aumenta o espaçamento entre cards */
+    align-items: stretch; /* Garante que todos os cards tenham a mesma altura */
 }
 
+/* Estilo do Card (ProductCard - componente filho) */
 .card {
     width: 100%;
-    border: none;
-    border-radius: 8px;
+    border: 1px solid var(--color-neutral-light);
+    border-radius: 10px;
     overflow: hidden;
-    background-color: white;
-    transition: transform 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-surface-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-subtle);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    padding: 10px;
-    margin-bottom: 30px;
+    justify-content: space-between; /* Espaço para o botão ir para baixo */
+    padding: 15px;
+    margin-bottom: 0; /* Removido margin-bottom duplicado */
+}
+
+.card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
 }
 
 .card img {
     width: 100%;
-    height: 200px;
+    height: 220px; /* Aumenta a altura da imagem */
     border-radius: 8px;
     object-fit: cover;
+    margin-bottom: 10px;
 }
 
 .card-hover a {
     text-decoration: none;
-    color: black;
-    font-size: 1.2rem;
+    color: var(--color-neutral-dark);
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .preco-desconto-cor {
-    color: rgb(180, 181, 181);
+    color: var(--color-neutral-medium);
+    text-decoration: line-through;
     font-size: 0.9rem;
 }
 
 .preco {
-    font-weight: bold;
-    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-primary-medium);
+    font-size: 1.4rem;
+    margin-top: 4px;
 }
 
 .estrelas {
-    font-size: 1.5rem;
+    color: gold;
+    font-size: 1rem;
+    margin-bottom: 10px;
 }
 
 .btn-adicionar-carrinho {
-    margin-top: auto;
-    background-color: #AA8ED6;
-    color: white;
+    margin-top: 15px; /* Espaço entre o preço/estrelas e o botão */
+    background-color: var(--color-action); /* Azul Primário */
+    color: var(--color-surface-card);
     border: none;
-    padding: 10px;
+    padding: 12px;
     border-radius: 8px;
     width: 100%;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    border: 1px solid #AA8ED6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    border: 1px solid var(--color-action);
+    transition: all 0.3s ease;
 }
 
 .btn-adicionar-carrinho:hover {
-    background-color: #fff;
-    color: #c084fc;
-    border: 1px solid #AA8ED6;
+    background-color: var(--color-action-hover);
+    border-color: var(--color-action-hover);
 }
 
+/* ======================================= */
+/* 5. PAGINAÇÃO                            */
+/* ======================================= */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    padding: 20px 0;
+}
+
+.pagination button {
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+/* Botões de navegação (Anterior/Próximo) */
+.btn-secondary {
+    background-color: var(--color-neutral-lighter);
+    border: 1px solid var(--color-neutral-light);
+    color: var(--color-neutral-dark);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--color-neutral-light);
+    border-color: var(--color-neutral-medium);
+}
+
+/* Botões de número (Padrão) */
+.btn-outline-secondary {
+    background-color: transparent;
+    border: 1px solid var(--color-neutral-light);
+    color: var(--color-neutral-medium);
+}
+
+.btn-outline-secondary:hover:not(:disabled) {
+    background-color: var(--color-neutral-lighter);
+    color: var(--color-primary-dark);
+}
+
+/* Botão de Página Ativa (usando btn-danger do código original, reestilizado) */
+.btn-danger { 
+    background-color: var(--color-action);
+    border: 1px solid var(--color-action);
+    color: var(--color-surface-card);
+    font-weight: 700;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: var(--color-action-hover);
+    border-color: var(--color-action-hover);
+}
+
+.pagination button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ======================================= */
+/* 6. RESPONSIVIDADE (MOBILE)              */
+/* ======================================= */
+
+@media (max-width: 768px) {
+    .product-page {
+        margin-top: 30px;
+        padding: 0 15px;
+    }
+    
+    .title {
+        font-size: 1.5rem;
+    }
+    
+    .category-section {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        gap: 10px;
+    }
+    
+    .categoria-dropdown {
+        width: 100%; /* Ocupa a largura total em mobile */
+    }
+
+    .cards-posicionamento {
+        /* Permite que o grid se ajuste melhor a 1 ou 2 colunas */
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+    }
+    
+    .card img {
+        height: 180px; /* Reduz a altura da imagem no mobile */
+    }
+
+    .pagination {
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+    
+    .pagination button {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cards-posicionamento {
+        /* Força uma única coluna em telas muito pequenas para melhor leitura */
+        grid-template-columns: 1fr; 
+    }
+}

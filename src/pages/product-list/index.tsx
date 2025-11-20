@@ -52,13 +52,13 @@ export const ProductListPage = () => {
     loadData();
   }, []);
 
-  // Filtra por categoria
+
   const filteredProducts =
     !category || category.id === 0
       ? products
       : products.filter((p) => p.category.id === category.id);
 
-  // paginacap
+  
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
   const currentPageSafe = Math.min(currentPage, totalPages || 1);
   const indexOfLastProduct = currentPageSafe * productsPerPage;
@@ -73,7 +73,6 @@ export const ProductListPage = () => {
     <main className="product-page">
   <Toast ref={toast} />
 
-  {/* Seção de Categoria */}
   <div className="category-section">
     <label className="categoria-label">Categoria</label>
     <Controller
@@ -93,7 +92,6 @@ export const ProductListPage = () => {
     />
   </div>
 
-  {/* Título */}
   <h2 className="title">Lista de Produtos Encontrados</h2>
 
 
@@ -115,8 +113,6 @@ export const ProductListPage = () => {
             </div>
           </section>
     
-
-      {/* Paginação */}
       <div className="pagination">
         <button
           className="btn btn-secondary btn-sm"

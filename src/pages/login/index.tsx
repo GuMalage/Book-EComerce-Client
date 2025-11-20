@@ -20,15 +20,14 @@ export const LoginPage = () => {
   const { login } = AuthService;
   const toast = useRef<Toast>(null);
   const [loading, setLoading] = useState(false);
-  const { handleLogin } =  useAuth(); // A função handleLogin será utilizada para atualizar o contexto com o usuário autenticado.
-
+  const { handleLogin } =  useAuth(); 
   const onSubmit = async (userLogin: IUserLogin) => {
     setLoading(true);
     try {
       const response = await login(userLogin);
       if (response.status === 200 && response.data) {
-        const authenticationResponse = response.data as AuthenticationResponse; // Define o objeto com token após a autenticação
-        handleLogin(authenticationResponse); // o contexto é atualizado com os dados da autenticação              
+        const authenticationResponse = response.data as AuthenticationResponse; 
+        handleLogin(authenticationResponse);             
         toast.current?.show({
           severity: "success",
           summary: "Sucesso",

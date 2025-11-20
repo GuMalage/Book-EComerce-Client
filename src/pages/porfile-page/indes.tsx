@@ -4,13 +4,15 @@ import type { IAddress, IUserLogin, IOrderResponse } from "@/commons/types";
 import AddressService from "@/services/Address-service";
 import OrderService from "@/services/Order-service";
 import { Link } from "react-router-dom";
-import "./profile-page.css"
+import "./profile-page.css";
 
 export function ProfilePage() {
     const [user, setUser] = useState<IUserLogin | null>(null);
     const [addresses, setAddresses] = useState<IAddress[]>([]);
     const [orders, setOrders] = useState<IOrderResponse[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const [currentTab, setCurrentTab] = useState<"addresses" | "orders">("addresses");
 
     const navigate = useNavigate();
 
@@ -25,7 +27,6 @@ export function ProfilePage() {
         }
     }, [user]);
 
-
     const loadUser = () => {
         setLoading(true);
 
@@ -37,7 +38,6 @@ export function ProfilePage() {
 
         setLoading(false);
     };
-
 
     const loadAddresses = async () => {
         try {
@@ -61,32 +61,40 @@ export function ProfilePage() {
         }
     };
 
-
     return (
-        <div className="profile-container">
-            {loading && <div className="spinner">Carregando...</div>}
-
-            {!loading && user && (
-                <div className="tabs">
-
-                    {/* HEADER DAS TABS */}
-                    <input type="radio" name="tabs" id="tab1" defaultChecked />
-                    <label htmlFor="tab1">Perfil</label>
-
-                    <input type="radio" name="tabs" id="tab2" />
-                    <label htmlFor="tab2">Endereços</label>
-
-                    <input type="radio" name="tabs" id="tab3" />
-                    <label htmlFor="tab3">Meus Pedidos</label>
-
-                    {/* PERFIL */}
-                    <div className="tab-content" id="content1">
+        <div className="profile-layout">
+            {/* PERFIL FIXO NA ESQUERDA */}
+            <aside className="profile-sidebar">
+                {!loading && user && (
+                    <>
                         <h2>Perfil</h2>
                         <p><strong>Nome:</strong> {user.username}</p>
-                    </div>
 
-                    {/* ENDEREÇOS */}
-                    <div className="tab-content" id="content2">
+                        <div className="menu">
+                            <button
+                                className={currentTab === "addresses" ? "active" : ""}
+                                onClick={() => setCurrentTab("addresses")}
+                            >
+                                Endereços
+                            </button>
+
+                            <button
+                                className={currentTab === "orders" ? "active" : ""}
+                                onClick={() => setCurrentTab("orders")}
+                            >
+                                Pedidos
+                            </button>
+                        </div>
+                    </>
+                )}
+            </aside>
+
+            {/* CONTEÚDO DA DIREITA (ENDEREÇOS / PEDIDOS) */}
+            <main className="profile-content">
+                {loading && <div className="spinner">Carregando...</div>}
+
+                {!loading && currentTab === "addresses" && (
+                    <div>
                         <h2>Meus Endereços</h2>
 
                         {addresses.length > 0 ? (
@@ -105,53 +113,48 @@ export function ProfilePage() {
                             Adicionar Endereço
                         </button>
                     </div>
+                )}
 
-                    {/* PEDIDOS */}
-                    <div className="tab-content" id="content3">
+                {!loading && currentTab === "orders" && (
+                    <div>
                         <h2>Histórico de Pedidos</h2>
 
                         {orders.length > 0 ? (
                             <div className="orders-grid">
-                                {orders.map(order => {
-                                
+                                {orders.map(order => (
+                                    <div key={order.id} className="order-card">
+                                        <p><strong>Data do Pedido:</strong> {new Date(order.dateOrder).toLocaleDateString("pt-BR")}</p>
+                                        <p><strong>Total:</strong> R${order.totalPrice}</p>
 
-                                    return (
-                                        <div key={order.id} className="order-card">
-                                            <p><strong>Data do Pedido:</strong> {new Date(order.dateOrder).toLocaleDateString("pt-BR")}</p>
-                                            <p><strong>Total:</strong> R${order.totalPrice}</p>
-
-                    
-
-                                            <strong>Itens:</strong>
-                                            <ul>
-                                                {order.itemsList.map(item => (
-                                                    <li key={item.productId}>
-                                                        <Link
+                                        <strong>Itens:</strong>
+                                        <ul>
+                                            {order.itemsList.map(item => (
+                                                <li key={item.productId}>
+                                                    <Link
                                                         to={`/product/${item.productId}`}
                                                         className="link-produto"
                                                         style={{ textDecoration: "none" }}
-                                                        >
+                                                    >
                                                         <img
                                                             src={item.urlImage as string}
                                                             className="card-img-top"
                                                         />
-                                                        </Link>
-                                                        <strong>Produto:</strong> {item.productName}<br />
-                                                        <strong>Preço:</strong> R${item.productPrice.toFixed(2)}<br />
-                                                        <strong>Qtd:</strong> {item.quantity}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    );
-                                })}
+                                                    </Link>
+                                                    <strong>Produto:</strong> {item.productName}<br />
+                                                    <strong>Preço:</strong> R${item.productPrice.toFixed(2)}<br />
+                                                    <strong>Qtd:</strong> {item.quantity}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
                             </div>
                         ) : (
                             <p>Nenhum pedido encontrado.</p>
                         )}
                     </div>
-                </div>
-            )}
+                )}
+            </main>
         </div>
     );
 }

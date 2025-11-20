@@ -6,6 +6,7 @@ import { Toast } from "primereact/toast";
 import AddToCartProvider from "@/components/add-cart";
 import "./product-page.css";
 
+
 export const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<IProduct | null>(null);
@@ -41,8 +42,10 @@ export const ProductPage = () => {
     loadData();
   }, [id]);
 
-  if (loading) return <p>Carregando...</p>;
-  if (!product) return <p>Produto não encontrado.</p>;
+  if (loading) return <p className="loading-message">Carregando...</p>;
+  if (!product) return <p className="error-message">Produto não encontrado.</p>;
+  
+  const precoFormatado = product.price ? product.price.toFixed(2).replace(".", ",") : "0,00";
 
   return (
     <>
@@ -50,11 +53,11 @@ export const ProductPage = () => {
 
       <AddToCartProvider>
         {(addToCart) => (
-          <section className="produto">
-            <div className="imagem-produto">
+          <section className="produto-livro">
+            <div className="imagem-produto-livro">
               <img id="imagemPrincipal" src={product.img as string} alt={product.name} />
 
-              <div className="subImagem-produto">
+              <div className="subImagem-produto-livro">
                 {[1, 2, 3].map((i) => (
                   <img
                     key={i}
@@ -66,52 +69,42 @@ export const ProductPage = () => {
               </div>
             </div>
 
-            <div className="informacoes">
+            <div className="informacoes-livro">
               <div>
-                <small className="desconto-stoque">Em Estoque</small>
+                <small className="status-estoque">Em Estoque</small>
 
-                <div className="nome-produto">
-                  <h2>{product.name}</h2>
+                <div className="nome-produto-livro">
+                  <h1>{product.name}</h1>
                 </div>
 
-                <div className="preco">
-                  <p className="preco-cor">R$ {product.price}</p>
+                {product.author && (
+                    <p className="autor-livro">
+                        Por: <strong>{product.author}</strong>
+                    </p>
+                )}
+
+                <div className="preco-livro">
+                  <p className="preco-cor">R$ {precoFormatado}</p>
                 </div>
+                
+                <div className="estrelas-avaliacao">★★★★★ (4.5/5)</div>
+                <hr className="divider" />
 
-                <hr />
-
-                <div className="conteudo">
+                <div className="conteudo-livro">
                   <p>{product.description}</p>
                 </div>
               </div>
 
-              <div className="acoes">
+              <div className="acoes-livro">
                 <button
-                  className="btn-adicionar-carrinho w-100 mt-2"
+                  className="btn-adicionar-carrinho"
                   onClick={() => addToCart(product)}
                 >
                   Adicionar ao Carrinho
                 </button>
               </div>
 
-              <hr />
-
-              <div className="frete-container">
-                <div className="calcular-frete">
-                  <input type="text" className="input-frete" placeholder="Seu CEP" />
-                  <button className="calcular-frete-button">Calcular Frete</button>
-                </div>
-
-                <p className="frete-link">
-                  Não sabe seu CEP?{" "}
-                  <a
-                    href="https://buscacepinter.correios.com.br/app/endereco/index.php"
-                    target="_blank"
-                  >
-                    Buscar CEP
-                  </a>
-                </p>
-              </div>
+              <hr className="divider" />
             </div>
           </section>
         )}
@@ -119,7 +112,7 @@ export const ProductPage = () => {
 
       <section className="descricao-avaliacao-container">
         <div className="descricao-titulo">
-          <h2>Descrição</h2>
+          <h2>Detalhes do Livro e Avaliações</h2>
           <hr />
         </div>
 
@@ -134,7 +127,9 @@ export const ProductPage = () => {
                 4.5<span>/5</span>
               </h3>
               <div className="estrelas">★★★★★</div>
+              <p className="qnt-avaliacoes">Baseado em 125 Avaliações</p>
             </div>
+          
           </div>
         </div>
       </section>

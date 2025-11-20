@@ -75,80 +75,82 @@ export function AddressPage() {
   };
 
   return (
-    <div className="container py-4" style={{ maxWidth: "700px", color: "#CC3733" }}>
-      <h2 className="text-center mb-4">Cadastro de Endereço</h2>
+    <div className="container py-4">
+      <div className="address-form-card"> 
+        <h2 className="text-center mb-4">Cadastro de Endereço</h2>
 
-      <Form>
-        <Form.Group className="mb-3" controlId="zip">
-          <Form.Label>CEP</Form.Label>
-          <Form.Control
-            type="text"
-            name="zip"
-            value={form.zip.replace(/\D/g, "")}
-            onChange={onChange}
-            onBlur={onBlurCEP}
-            isInvalid={!!cepError}
-          />
-          {cepError && <Form.Text className="text-danger">{cepError}</Form.Text>}
-        </Form.Group>
+        <Form>
+          <Form.Group className="mb-3" controlId="zip">
+            <Form.Label>CEP</Form.Label>
+            <Form.Control
+              type="text"
+              name="zip"
+              value={form.zip.replace(/\D/g, "")}
+              onChange={onChange}
+              onBlur={onBlurCEP}
+              isInvalid={!!cepError}
+            />
+            {cepError && <Form.Text className="text-danger">{cepError}</Form.Text>}
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="street">
-          <Form.Label>Rua</Form.Label>
-          <Form.Control
-            type="text"
-            name="street"
-            value={form.street}
-            onChange={onChange}
-          />
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="street">
+            <Form.Label>Rua</Form.Label>
+            <Form.Control
+              type="text"
+              name="street"
+              value={form.street}
+              onChange={onChange}
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="houseNumber">
-          <Form.Label>Número</Form.Label>
-          <Form.Control
-            type="number"
-            name="houseNumber"
-            value={form.houseNumber ?? ""}
-            onChange={onChange}
-          />
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="houseNumber">
+            <Form.Label>Número</Form.Label>
+            <Form.Control
+              type="number"
+              name="houseNumber"
+              value={form.houseNumber ?? ""}
+              onChange={onChange}
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="complement">
-          <Form.Label>Complemento</Form.Label>
-          <Form.Control
-            type="text"
-            name="complement"
-            value={form.complement}
-            onChange={onChange}
-          />
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="complement">
+            <Form.Label>Complemento</Form.Label>
+            <Form.Control
+              type="text"
+              name="complement"
+              value={form.complement}
+              onChange={onChange}
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="city">
-          <Form.Label>Cidade</Form.Label>
-          <Form.Control
-            type="text"
-            name="city"
-            value={form.city}
-            onChange={onChange}
-          />
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="city">
+            <Form.Label>Cidade</Form.Label>
+            <Form.Control
+              type="text"
+              name="city"
+              value={form.city}
+              onChange={onChange}
+            />
+          </Form.Group>
 
 
-        {apiError && (
-          <Alert variant="danger">Falha ao salvar o endereço!</Alert>
-        )}
-        {apiSuccess && (
-          <Alert variant="success">Endereço salvo com sucesso!</Alert>
-        )}
+          {apiError && (
+            <Alert variant="danger">Falha ao salvar o endereço!</Alert>
+          )}
+          {apiSuccess && (
+            <Alert variant="success">Endereço salvo com sucesso!</Alert>
+          )}
 
-        <Button
-          variant="danger"
-          disabled={pendingApiCall}
-          onClick={onClickSave}
-          className="w-100 mt-3"
-        >
-          {pendingApiCall ? "Salvando..." : "Salvar"}
-        </Button>
-      </Form>
+          <Button
+            variant="danger" 
+            disabled={pendingApiCall}
+            onClick={onClickSave}
+            className="w-100 mt-3"
+          >
+            {pendingApiCall ? "Salvando..." : "Salvar"}
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 }

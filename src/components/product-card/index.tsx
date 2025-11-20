@@ -8,10 +8,12 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
-  const precoFormatado = product.price.toFixed(2).replace(".", ",");
+  const precoFormatado = product.price
+    ? product.price.toFixed(2).replace(".", ",")
+    : "0,00";
 
   return (
-    <div className="card border-0">
+    <div className="produto-card">
       <div className="position-relative">
         <Link
           to={`/product/${product.id}`}
@@ -21,36 +23,40 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <img
             src={product.img as string}
             className="card-img-top"
-            alt={product.name}
+            alt={`Capa do Livro: ${product.name}`}
           />
         </Link>
       </div>
 
-      <div className="card-body p-2 card-hover">
+      <div
+        className="card-body"
+      >
         <Link
           to={`/product/${product.id}`}
-          className="fw-bold link-produto"
-          style={{ textDecoration: "none", color: "inherit" }}
+          className="link-produto"
         >
           {product.name}
         </Link>
 
-        <div className="progress mb-2" style={{ height: "6px" }}>
-          <div className="progress-bar" style={{ width: "80%" }}></div>
-        </div>
+        {(product as any).author && (
+          <p className="text-muted">
+            {(product as any).author}
+          </p>
+        )}
 
-        <p className="mb-1 fw-bold">
+        <p className="mb-1 mt-auto">
           <span className="preco">R$ {precoFormatado}</span>
         </p>
 
-        <div className="text-warning estrelas">★★★★☆</div>
+        <div className="estrelas" aria-label="Avaliação 4 de 5 estrelas">
+          ★★★★☆
+        </div>
 
-        {/* ---- AQUI ENTRA O PROVIDER ---- */}
         <AddToCartProvider>
           {(addToCart) => (
             <button
               data-id={product.id}
-              className="btn-adicionar-carrinho w-100 mt-2"
+              className="btn-adicionar-carrinho"
               onClick={() => addToCart(product)}
             >
               Adicionar ao Carrinho

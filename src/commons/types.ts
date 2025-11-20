@@ -44,6 +44,7 @@ export interface IProduct {
   price: number;
   category: ICategory;
   img: String;
+  author: string; 
 }
 
 export interface IAddress {

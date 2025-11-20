@@ -1,76 +1,121 @@
 .cards-produtos {
     width: 100%;
-    max-width: 1150px;
-    margin: 0 auto 40px auto;
+    max-width: 1200px;
+    margin: 0 auto 50px auto;
     padding: 0 20px;
 }
 
 .cards-posicionamento {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    align-items: start;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px;
+    align-items: stretch;
     justify-content: center;
 }
 
-.card {
+.produto-card {
     width: 100%;
-    border: none;
-    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
     overflow: hidden;
-    background-color: white;
-    transition: transform 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 10px;
-    margin-bottom: 30px;
+    padding: 0;
+    height: 100%;
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 
-.card img {
+.produto-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.produto-card img {
     width: 100%;
-    height: 200px;
-    border-radius: 8px;
+    height: 300px;
+    border-radius: 4px 4px 0 0;
     object-fit: cover;
+    object-position: top center;
 }
 
-.card-hover a {
+.produto-card .card-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    text-align: center;
+}
+
+/* Título e Link */
+.produto-card .link-produto {
     text-decoration: none;
-    color: black;
-    font-size: 1.2rem;
+    color: #3D4A5C;
+    font-weight: 600;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    display: block;
+    margin-bottom: 5px;
+    padding: 0 10px;
+    min-height: 2.8em;
 }
 
-.preco-desconto-cor {
-    color: rgb(180, 181, 181);
+/* Autor */
+.produto-card .text-muted {
+    color: #8A8A8A !important;
     font-size: 0.9rem;
+    margin-bottom: 8px;
 }
 
-.preco {
-    font-weight: bold;
+/* Preço */
+.produto-card .preco {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #3D4A5C;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Preço Risca */
+.produto-card .preco-desconto-cor {
+    color: #8A8A8A;
+    font-size: 0.85rem;
+    text-decoration: line-through;
+    margin-right: 5px;
+}
+
+/* Estrelas */
+.produto-card .estrelas {
     font-size: 1.2rem;
+    margin-top: 5px;
+    text-align: center;
+    color: #ffc107;
+    margin-bottom: 8px;
 }
 
-.estrelas {
-    font-size: 1.5rem;
-}
-
-.btn-adicionar-carrinho {
+/* Botão */
+.produto-card .btn-adicionar-carrinho {
     margin-top: auto;
-    background-color: #AA8ED6;
+    background-color: #3D4A5C;
     color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
+    border: 1px solid #3D4A5C;
+    padding: 12px 10px;
+    border-radius: 4px;
     width: 100%;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    border: 1px solid #AA8ED6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.btn-adicionar-carrinho:hover {
-    background-color: #fff;
-    color: #c084fc;
-    border: 1px solid #AA8ED6;
+.produto-card .btn-adicionar-carrinho:hover {
+    background-color: #BAD0E0;
+    color: #3D4A5C;
+    border-color: #BAD0E0;
 }

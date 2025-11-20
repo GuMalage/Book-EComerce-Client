@@ -1,19 +1,20 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f8ec;
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f8ec; 
     margin: 0;
     padding: 0;
     color: #333;
+    line-height: 1.5;
 }
 
 .container {
     display: flex;
     justify-content: space-between;
     max-width: 1200px;
-    margin: 100px auto 40px;
+    margin: 60px auto 40px;
     padding: 0 20px;
-    gap: 24px;
-    margin-top: 60px;
+    gap: 30px;
+    margin-top: 80px;
 }
 
 .carrinho {
@@ -21,317 +22,320 @@ body {
     background-color: #fff;
     border-radius: 12px;
     padding: 30px;
-    transition: box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .carrinho h2 {
     font-size: 1.8rem;
     margin-bottom: 25px;
-    color: #AA8ED6;
+    color: #3D4A5C; 
     font-weight: 700;
-    border-bottom: 2px solid #AA8ED6;
-    padding-bottom: 10px;
+    border-bottom: 2px solid #BAD0E0; 
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contador-itens {
+    font-size: 1rem;
+    color: #8A8A8A; 
+    font-weight: 500;
 }
 
 .carrinho-itens .carrinho-item {
     display: flex;
     align-items: center;
-    background: #faf9fd;
+    background: #ffffff; 
     padding: 20px;
-    border-bottom: 1px solid #ddd;
+    border: 1px solid #e0e0e0;
     border-radius: 10px;
     margin-bottom: 15px;
     gap: 20px;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03); 
 }
 
 .carrinho-item:hover {
-    background-color: #f3eaff;
+    background-color: #f9f9f9; 
+    box-shadow: 0 4px 10px rgba(61, 74, 92, 0.1); 
 }
 
-.carrinho-item img {
-    width: 110px;
-    height: 110px;
+.carrinho-item .img-produto {
+    width: 90px;
+    height: 120px;
     object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(170, 142, 214, 0.1);
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
 }
 
-.carrinho-item div {
-    flex: 1;
+.carrinho-item .carrinho-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .carrinho-item h4 {
-    margin: 0;
+    margin: 0 0 5px 0;
     font-weight: 600;
-    font-size: 1.5rem;
-    color: #5a3d7c;
+    font-size: 1.1rem;
+    color: #3D4A5C; 
 }
 
 .carrinho-item p {
-    margin: 6px 0;
-    font-size: 15px;
-    color: #7a6a9d;
+    margin: 3px 0;
+    font-size: 0.9rem;
+    color: #8A8A8A; 
+}
+
+.carrinho-item strong {
+    color: #3D4A5C;
 }
 
 .carrinho-item .btn-remover {
     background: none;
     border: none;
-    font-size: 1rem;
-    color: #AA8ED6;
+    font-size: 1.8rem; 
+    color: #8A8A8A; 
     cursor: pointer;
-    transition: color 0.3s ease;
-    padding: 0 10px;
-    border-radius: 6px;
-    align-self: flex-start;
+    transition: color 0.3s ease, transform 0.2s;
+    padding: 0;
+    align-self: center;
+    margin-left: 15px;
 }
 
 .carrinho-item .btn-remover:hover {
-    color: #6b4e9f;
-    background-color: #fff;
+    color: #FF6B6B;
+    transform: scale(1.15);
 }
 
 .quantidade {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin: 5px 0;
+    margin: 10px 0;
 }
 
 .quantidade button {
-    background-color: #AA8ED6;
-    color: white;
+    background-color: #BAD0E0; 
+    color: #3D4A5C; 
     border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 6px 12px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.1s;
 }
 
 .quantidade button:hover {
-    background-color: #916dc7;
+    background-color: #adc6d6; 
+    transform: scale(1.05);
 }
 
 .quantidade span {
-    min-width: 24px;
+    min-width: 30px;
     text-align: center;
     display: inline-block;
     font-weight: bold;
-}
-
-.resumo {
-    width: 30%;
-    height: 45vh;
-    background: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(170, 142, 214, 0.15);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.resumo h3 {
-    font-size: 24px;
-    color: #AA8ED6;
-    margin-bottom: 20px;
-    font-weight: 700;
-    border-bottom: 2px solid #AA8ED6;
-    padding-bottom: 10px;
-}
-
-.resumo p{
-    font-size: 1.4rem;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.linha {
-    height: 1px;
-    background: #ddd;
-    margin: 20px 0;
-    border-radius: 1px;
-}
-
-.quantidade span {
-    font-size: 1rem;
-}
-
-.btn-remover {
-    font-size: 12px;
-    padding: 2px 8px;
-}
-
-.total,
-.total-final {
-    font-size: 22px;
-    margin-bottom: 25px;
-    color: #5a3d7c;
-    font-weight: 600;
-}
-
-.resumo label {
-    display: block;
-    margin: 12px 0 6px;
-    font-size: 15px;
-    color: #6a5e87;
-    font-weight: 600;
-}
-
-.resumo select,
-.resumo input {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 18px;
-    border: 1.8px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    transition: border-color 0.3s ease;
-    color: #5a3d7c;
-}
-
-.resumo select:focus,
-.resumo input:focus {
-    outline: none;
-    border-color: #AA8ED6;
-    box-shadow: 0 0 5px rgba(170, 142, 214, 0.5);
-}
-
-.finalizar {
-    width: 100%;
-    background: #AA8ED6;
-    color: white;
-    padding: 16px;
-    border: none;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.finalizar:hover {
-    background: #76bbec;
-}
-
-.finalizar a {
-    text-decoration: none;
-    color: #fff;
+    font-size: 1.1rem;
+    color: #3D4A5C;
 }
 
 .voltar {
     display: inline-block;
     margin-top: 25px;
-    color: black;
+    color: #3D4A5C; 
     text-decoration: none;
     font-weight: 600;
+    font-size: 1.3rem;
     transition: color 0.3s ease;
-    font-size: 1.2rem;
 }
 
 .voltar:hover {
-color: #AA8ED6;
+    color: #8A8A8A; 
 }
 
-.titulo-resumo {
+.resumo {
+    width: 30%;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08); 
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-self: flex-start;
+}
+
+.resumo h3 {
+    font-size: 1.6rem;
+    color: #3D4A5C;
+    margin-bottom: 20px;
+    font-weight: 700;
+    border-bottom: 2px solid #BAD0E0;
+    padding-bottom: 10px;
+}
+
+.resumo p {
     font-size: 1.3rem;
     color: #4d4653;
+    margin: 10px 0 5px 0;
 }
 
-.contador-itens {
-    font-size: 1.4rem;
-    margin-bottom: -20px;
-    color: #5c5c5c;
-    font-weight: 600;
+.total {
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+    color: #3D4A5C;
+    font-weight: 700;
+}
+
+.finalizar {
+    width: 100%;
+    background: #3D4A5C; 
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 3px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 8px rgba(61, 74, 92, 0.3); 
+}
+
+.finalizar:hover {
+    background: #BAD0E0; 
+    color: #3D4A5C; 
+}
+
+.btn-remover {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #cc0000;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remover:hover {
+  color: #ff3333;
+  transform: scale(1.1);
+}
+
+.icon-trash {
+  width: 22px;
+  height: 22px;
 }
 
 
 @media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        gap: 20px;
+    }
 
     .carrinho,
     .resumo {
         width: 100%;
-        margin-bottom: 30px;
+        padding: 20px;
     }
-
+    
     .carrinho-itens .carrinho-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 15px;
     }
 
-    .carrinho-item img {
-        width: 180px;
-        height: 180px;
+    .carrinho-item .img-produto {
+        width: 80px;
+        height: 100px;
+    }
+    
+    .carrinho-item .carrinho-info {
+        flex-grow: 1;
+        min-width: 180px;
     }
 
-    .btn-remover {
-        align-self: flex-end;
+    .carrinho-info > p:last-of-type {
+        margin-top: 10px;
+    }
+    
+    .quantidade {
+        order: 3;
+        margin-top: 5px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .carrinho-item .btn-remover {
+        align-self: flex-start;
+        order: 1;
+        font-size: 1.5rem;
     }
 }
 
+
 @media (max-width: 600px) {
     .container {
-        flex-direction: column;
-        margin-top: -1px;
+        margin-top: 20px;
+        padding: 0 10px;
+        gap: 15px;
+    }
+    
+    .carrinho {
+        padding: 15px;
+    }
+    
+    .carrinho h2 {
+        font-size: 1.4rem;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .carrinho-itens .carrinho-item {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .carrinho-item .img-produto {
+        width: 60px;
+        height: 90px;
+    }
+
+    .carrinho-item .carrinho-info {
+        min-width: unset;
     }
 
     .carrinho-item h4 {
+        font-size: 1rem;
+    }
+
+    .quantidade {
+        order: 4;
+        margin-top: 5px;
+    }
+    
+    .carrinho-item .btn-remover {
+        order: 2;
+        align-self: center;
         font-size: 1.5rem;
-    }
-
-    .carrinho-item p {
-        font-size: 1.3rem;
-    }
-
-    .quantidade button {
-        padding: 8px 12px;
-        font-size: 1.4rem;
-    }
-
-    .quantidade span {
-        padding: 8px 12px;
-        font-size: 1.5rem;
-    }
-
-    .carrinho-item img {
-        width: 270px;
-        height: 260px;
-    }
-
-    .finalizar {
-        font-size: 16px;
-        padding: 14px;
-    }
-
-    .subtotal {
-        font-size: 1.5rem;
-        margin-top: 6px;
-        margin-bottom: 7px;
-    }
-
-    .titulo-resumo {
-        flex-direction: column;
-        padding-bottom: 15px;
-    }
-
-    .carrinho h2 {
-        border-bottom: none;
     }
 
     .resumo {
-        height: 25vh;
-    }
-
-    .resumo h3 {
-        font-size: 2rem;
+        padding: 20px;
     }
 
     .total {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
 
+    .finalizar {
+        font-size: 1rem;
+        padding: 12px;
+    }
 }

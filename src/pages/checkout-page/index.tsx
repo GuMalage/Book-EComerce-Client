@@ -19,13 +19,11 @@ const CheckoutPage = () => {
   const toast = useRef<Toast>(null);
   const navigate = useNavigate();
 
-  // Carrega carrinho
   useEffect(() => {
     const cartItems: IProduct[] = JSON.parse(localStorage.getItem("cart") || "[]");
     setProducts(cartItems);
   }, []);
 
-  // Carrega endereços
   useEffect(() => {
     AddressService.getByUser().then((res) => setAddresses(res || []));
   }, []);
@@ -77,7 +75,6 @@ const CheckoutPage = () => {
 
     const response = await OrderService.save(order);
 
-    // 🚀 CORRETO AGORA — ANALISA STATUS HTTP REAL
     if (response && response.httpStatus === 200) {
       toast.current?.show({
         severity: "success",
@@ -111,7 +108,6 @@ const CheckoutPage = () => {
       <Toast ref={toast} />
       <h1 className="fw-bold mb-4">Finalização da compra</h1>
 
-      {/* ENDEREÇOS */}
       <div className="checkout-box">
         <h5>Selecione o endereço de entrega</h5>
         {addresses.length === 0 && <p>Nenhum endereço cadastrado.</p>}
@@ -132,7 +128,6 @@ const CheckoutPage = () => {
         ))}
       </div>
 
-      {/* FRETE */}
       <div className="checkout-box">
         <h5>Forma de envio</h5>
 
@@ -159,7 +154,6 @@ const CheckoutPage = () => {
         )}
       </div>
 
-      {/* PAGAMENTO */}
       <div className="checkout-box">
         <h5>Método de pagamento</h5>
         <select
@@ -173,7 +167,6 @@ const CheckoutPage = () => {
         </select>
       </div>
 
-      {/* ITENS */}
       <div className="checkout-card">
         <div className="checkout-card-header">
           <h5 className="m-0">Itens do pedido</h5>
@@ -194,7 +187,6 @@ const CheckoutPage = () => {
         </div>
       </div>
 
-      {/* RESUMO */}
       <div className="checkout-box">
         <h5>Resumo do pedido</h5>
 
