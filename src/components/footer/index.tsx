@@ -10,6 +10,7 @@ import mastercard from "@/assets/mastercard@2x.png";
 import visa from "@/assets/visa@2x.png";
 import boleto from "@/assets/boleto@2x.png";
 import pix from "@/assets/pix@2x.png";
+import logo from "@/assets/logo_transparent.png";
 
 export function Footer() {
   return (
@@ -20,7 +21,7 @@ export function Footer() {
         <div className="informacoes-contato">
           <div>
             <div className="politicas">
-              <img src="img/imgLogo/logo-fundo.png" alt="Logo Loyalty" />
+              <img src={logo} alt="Logo Ponto e Pena Livraria" />
               <div className="politica-hover">
                 <a href="#">Institucional</a>
               </div>
@@ -73,7 +74,7 @@ export function Footer() {
       <section className="direitos-autorais">
         <div className="direitos-autorais-estilo">
           <h3>
-            &copy;2025 <span className="destaque-texto">Loyalty</span>. Todos os
+            &copy;2025 <span className="destaque-texto">Ponto e Pena Livraria</span>. Todos os
             direitos reservados.
           </h3>
         </div>

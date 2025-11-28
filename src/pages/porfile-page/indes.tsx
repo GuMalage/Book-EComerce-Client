@@ -12,7 +12,7 @@ export function ProfilePage() {
     const [orders, setOrders] = useState<IOrderResponse[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const [currentTab, setCurrentTab] = useState<"addresses" | "orders">("addresses");
+    const [currentTab, setCurrentTab] = useState<"orders" | "addresses">("orders");
 
     const navigate = useNavigate();
 
@@ -63,7 +63,6 @@ export function ProfilePage() {
 
     return (
         <div className="profile-layout">
-            {/* PERFIL FIXO NA ESQUERDA */}
             <aside className="profile-sidebar">
                 {!loading && user && (
                     <>
@@ -72,48 +71,27 @@ export function ProfilePage() {
 
                         <div className="menu">
                             <button
-                                className={currentTab === "addresses" ? "active" : ""}
-                                onClick={() => setCurrentTab("addresses")}
-                            >
-                                Endereços
-                            </button>
-
-                            <button
                                 className={currentTab === "orders" ? "active" : ""}
                                 onClick={() => setCurrentTab("orders")}
                             >
                                 Pedidos
+                            </button>
+
+                            <button
+                                className={currentTab === "addresses" ? "active" : ""}
+                                onClick={() => setCurrentTab("addresses")}
+                            >
+                                Endereços
                             </button>
                         </div>
                     </>
                 )}
             </aside>
 
-            {/* CONTEÚDO DA DIREITA (ENDEREÇOS / PEDIDOS) */}
             <main className="profile-content">
                 {loading && <div className="spinner">Carregando...</div>}
 
-                {!loading && currentTab === "addresses" && (
-                    <div>
-                        <h2>Meus Endereços</h2>
 
-                        {addresses.length > 0 ? (
-                            addresses.map(address => (
-                                <div key={address.id} className="address-card">
-                                    <p><strong>Rua:</strong> {address.street}, {address.houseNumber}</p>
-                                    <p><strong>Cidade:</strong> {address.city}</p>
-                                    <p><strong>CEP:</strong> {address.zip}</p>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="warning-text">Nenhum endereço cadastrado.</p>
-                        )}
-
-                        <button className="btn btn-red" onClick={() => navigate("/address")}>
-                            Adicionar Endereço
-                        </button>
-                    </div>
-                )}
 
                 {!loading && currentTab === "orders" && (
                     <div>
@@ -135,12 +113,16 @@ export function ProfilePage() {
                                                         className="link-produto"
                                                         style={{ textDecoration: "none" }}
                                                     >
-                                                        <img
-                                                            src={item.urlImage as string}
-                                                            className="card-img-top"
-                                                        />
+                                                        <div className="card-img-wrapper">
+                                                            <img src={item.urlImage} className="card-img-top" />
+                                                        </div>
+
+                                                        <strong className="product-link-name">
+                                                            Produto: {item.productName}
+                                                        </strong>
+                                                        <br />
                                                     </Link>
-                                                    <strong>Produto:</strong> {item.productName}<br />
+
                                                     <strong>Preço:</strong> R${item.productPrice.toFixed(2)}<br />
                                                     <strong>Qtd:</strong> {item.quantity}
                                                 </li>
@@ -152,6 +134,27 @@ export function ProfilePage() {
                         ) : (
                             <p>Nenhum pedido encontrado.</p>
                         )}
+                    </div>
+                )}
+                {!loading && currentTab === "addresses" && (
+                    <div>
+                        <h2>Meus Endereços</h2>
+
+                        {addresses.length > 0 ? (
+                            addresses.map(address => (
+                                <div key={address.id} className="address-card">
+                                    <p><strong>Rua:</strong> {address.street}, {address.houseNumber}</p>
+                                    <p><strong>Cidade:</strong> {address.city}</p>
+                                    <p><strong>CEP:</strong> {address.zip}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="warning-text">Nenhum endereço cadastrado.</p>
+                        )}
+
+                        <button className="add-address-btn" onClick={() => navigate("/address")}>
+                            Adicionar Endereço
+                        </button>
                     </div>
                 )}
             </main>

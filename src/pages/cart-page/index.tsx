@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import AuthService from "@/services/Auth-service";
 import { confirmDialog } from "primereact/confirmdialog";
 import { toastRef } from "@/App";
+import { Link } from "react-router-dom";
 import "./cart-page.css";
 
 export function CartPage() {
@@ -18,7 +19,7 @@ export function CartPage() {
     const stored = JSON.parse(localStorage.getItem("cart") || "[]").map(
       (p: any, index: number) => ({
         ...p,
-        id: p.id ?? p._id ?? index, 
+        id: p.id ?? p._id ?? index,
         cartQuantity: p.cartQuantity || 1,
       })
     );
@@ -38,48 +39,48 @@ export function CartPage() {
   };
 
   const decreaseQuantity = (id: number) => {
-  const product = cart.find((p) => p.id === id);
-  if (!product) return;
+    const product = cart.find((p) => p.id === id);
+    if (!product) return;
 
-  if (product.cartQuantity === 1) {
-            confirmDialog({
-            header: "Remover produto",
-            message: (
-                <div style={{ lineHeight: 1.6 }}>
-                Deseja realmente remover <strong>{product.name}</strong> do carrinho?
-                </div>
-            ),
-            icon: "pi pi-exclamation-triangle",
-            acceptLabel: "Remover",
-            rejectLabel: "Cancelar",
-            acceptClassName: "p-button-danger",
-            rejectClassName: "p-button-text",
-            accept: () => {
-                const updated = cart.filter((p) => p.id !== id);
-                saveCart(updated);
-                toastRef.current?.show({
-                severity: "success",
-                summary: "Removido",
-                detail: `"${product.name}" foi removido do carrinho.`,
-                life: 3000,
-                });
-            },
-            reject: () => {
-                toastRef.current?.show({
-                severity: "info",
-                summary: "Cancelado",
-                detail: "O produto não foi removido.",
-                life: 2500,
-                });
-            },
-            });
-        } else {
-            const updated = cart.map((p) =>
-            p.id === id ? { ...p, cartQuantity: p.cartQuantity - 1 } : p
-            );
-            saveCart(updated);
-        }
-   };
+    if (product.cartQuantity === 1) {
+      confirmDialog({
+        header: "Remover produto",
+        message: (
+          <div style={{ lineHeight: 1.6 }}>
+            Deseja realmente remover <strong>{product.name}</strong> do carrinho?
+          </div>
+        ),
+        icon: "pi pi-exclamation-triangle",
+        acceptLabel: "Remover",
+        rejectLabel: "Cancelar",
+        acceptClassName: "p-button-danger",
+        rejectClassName: "p-button-text",
+        accept: () => {
+          const updated = cart.filter((p) => p.id !== id);
+          saveCart(updated);
+          toastRef.current?.show({
+            severity: "success",
+            summary: "Removido",
+            detail: `"${product.name}" foi removido do carrinho.`,
+            life: 3000,
+          });
+        },
+        reject: () => {
+          toastRef.current?.show({
+            severity: "info",
+            summary: "Cancelado",
+            detail: "O produto não foi removido.",
+            life: 2500,
+          });
+        },
+      });
+    } else {
+      const updated = cart.map((p) =>
+        p.id === id ? { ...p, cartQuantity: p.cartQuantity - 1 } : p
+      );
+      saveCart(updated);
+    }
+  };
 
 
   const confirmRemove = (product: IProduct) => {
@@ -151,14 +152,29 @@ export function CartPage() {
           ) : (
             cart.map((produto) => (
               <div key={produto.id} className="carrinho-item">
-                <img
-                  src={produto.img as string}
-                  alt={produto.name}
-                  className="img-produto"
-                />
+
+
+
+                {/* IMAGEM CLICÁVEL */}
+                <Link to={`/product/${produto.id}`}>
+                  <img
+                    src={produto.urlImage}
+                    alt={produto.name}
+                    className="img-produto"
+                  />
+                </Link>
+
                 <div className="carrinho-info">
-                  <h4>{produto.name}</h4>
+                  {/* NOME CLICÁVEL */}
+                  <Link
+                    to={`/product/${produto.id}`}
+                    className="link-produto nome-produto-carrinho"
+                    style={{ textDecoration: "none" }}
+                  >
+                    {produto.name}
+                  </Link>
                   <p>Preço unitário: {formatPrice(produto.price)}</p>
+
                   <div className="quantidade">
                     <button
                       className="btn-diminuir"
@@ -166,7 +182,9 @@ export function CartPage() {
                     >
                       -
                     </button>
+
                     <span>{produto.cartQuantity}</span>
+
                     <button
                       className="btn-aumentar"
                       onClick={() => increaseQuantity(produto.id)}
@@ -174,6 +192,7 @@ export function CartPage() {
                       +
                     </button>
                   </div>
+
                   <p>
                     <strong>
                       Subtotal:{" "}
@@ -181,23 +200,26 @@ export function CartPage() {
                     </strong>
                   </p>
                 </div>
+
                 <button
-                className="btn-remover"
-                onClick={() => confirmRemove(produto)}
-              >
-                <svg 
-                  className="icon-trash" 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 24 24" 
-                  fill="currentColor" 
-                  aria-hidden="true"
+                  className="btn-remover"
+                  onClick={() => confirmRemove(produto)}
                 >
-                  <path d="M16 9v10H8V9h8zm-1.5-6h-5L9 4.5H4v2h16v-2h-5l-.5-1.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/>
-                </svg>
-              </button>
+                  <svg
+                    className="icon-trash"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M16 9v10H8V9h8zm-1.5-6h-5L9 4.5H4v2h16v-2h-5l-.5-1.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" />
+                  </svg>
+                </button>
+
               </div>
             ))
           )}
+
+
         </div>
 
         <NavLink to="/" className="voltar">

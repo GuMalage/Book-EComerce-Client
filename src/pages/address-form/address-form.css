@@ -11,13 +11,12 @@
     --color-action-primary-hover: #3b546e;
     --color-success: #28a745;
     --color-danger: #dc3545;
-    --shadow-subtle: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.08);
     --transition-standard: all 0.3s ease;
     --font-family-standard: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .container {
-    padding-top: 50px;
     padding-bottom: 50px;
     font-family: var(--font-family-standard);
     background-color: var(--color-surface-background);
@@ -26,10 +25,11 @@
 .address-form-card {
     background: var(--color-surface-card);
     padding: 30px;
+    padding-top: 0px;
     border-radius: 12px;
-    box-shadow: var(--shadow-subtle);
     max-width: 700px;
     margin: 0 auto;
+    margin-top: 15px;
 }
 
 h2 {
@@ -93,7 +93,7 @@ h2 {
 .btn.btn-danger:hover:not(:disabled) {
     background: var(--color-action-primary-hover);
     border-color: var(--color-action-primary-hover);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
 }
 
 .btn.btn-danger:disabled {
@@ -134,6 +134,7 @@ h2 {
     .address-form-card {
         padding: 20px;
         border-radius: 8px;
+        margin-top: 25px;
     }
 
     h2 {

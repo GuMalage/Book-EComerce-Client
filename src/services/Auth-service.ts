@@ -1,11 +1,6 @@
 import type { IUserRegister, IUserLogin, IResponse } from "@/commons/types";
 import { api } from "@/lib/axios";
 
-/**
- * Função para cadastrar um novo usuário
- * @param user - Dados do usuário que será cadastrado do tipo IUserRegister
- * @returns - Retorna a resposta da API
- */
 const signup = async (user: IUserRegister): Promise<IResponse> => {
   let response = {} as IResponse;
   try {
@@ -27,17 +22,11 @@ const signup = async (user: IUserRegister): Promise<IResponse> => {
   return response;
 };
 
-/**
- * Função para realizar a autenticação do usuário
- * @param user - Dados do usuário que será autenticado do tipo IUserLogin
- * @returns - Retorna a resposta da API
- */
 const login = async (user: IUserLogin): Promise<IResponse> => {
   let response = {} as IResponse;
   try {
     const data = await api.post("/login", user);
 
-    // Salva o token no localStorage
     const token = data.data?.token;
     if (token) {
       localStorage.setItem("token", token);
@@ -61,28 +50,21 @@ const login = async (user: IUserLogin): Promise<IResponse> => {
   return response;
 };
 
-/**
- * Função que verifica se o usuário está autenticado
- * @returns true se existir um token válido no localStorage
- */
 const isAuthenticated = (): boolean => {
   const token = localStorage.getItem("token");
   if (!token) return false;
 
-  // Verifica se o token expirou (decodifica o JWT)
   try {
     const [, payloadBase64] = token.split(".");
     const payload = JSON.parse(atob(payloadBase64));
-    const exp = payload.exp * 1000; // exp vem em segundos
+    const exp = payload.exp * 1000;
     return Date.now() < exp;
   } catch {
     return false;
   }
 };
 
-/**
- * Função para realizar o logout do usuário
- */
+
 const logout = () => {
   localStorage.removeItem("token");
   delete api.defaults.headers.common["Authorization"];

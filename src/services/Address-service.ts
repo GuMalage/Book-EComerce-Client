@@ -1,6 +1,5 @@
-import type { IAddress, IResponse} from "@/commons/types";
+import type { IAddress, IResponse } from "@/commons/types";
 import { api } from "@/lib/axios";
-import axios from "axios";
 
 const addressURL = "/address";
 

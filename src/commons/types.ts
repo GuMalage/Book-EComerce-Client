@@ -43,8 +43,9 @@ export interface IProduct {
   description: string;
   price: number;
   category: ICategory;
-  img: String;
-  author: string; 
+  urlImage?: string;
+  longDescription: string;
+  autorName: string; 
 }
 
 export interface IAddress {
@@ -69,22 +70,9 @@ export interface IOrder {
 export interface IOrderResponse {
     id?: number;
     dateOrder: Date;
-    itemsList: {productId: number, productPrice: number, quantity: number, productName: String, totalPriceItems: number, urlImage: String}[];
+    itemsList: {productId: number, productPrice: number, quantity: number, productName: String, totalPriceItems: number, urlImage: string}[];
     addressId: number,
     totalPrice: number;
-}
-
-export interface ICartItem {
-    id?: number;
-    name: string;
-    brand: string;
-    description: string;
-    price: number;
-    details: string;
-    quantity: number;
-    ingredients: string;
-    image: string;
-    category: ICategory;
 }
 
 export interface ICartItem {

@@ -9,34 +9,41 @@ import type { AuthenticationResponse, IUserLogin } from "@/commons/types";
 import AuthService from "@/services/Auth-service";
 import { Toast } from "primereact/toast";
 import { useAuth } from "@/context/hooks/use-auth";
+import "./login.css";
 
 export const LoginPage = () => {
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<IUserLogin>({ defaultValues: { username: "", password: "" } });  
+  } = useForm<IUserLogin>({
+    defaultValues: { username: "", password: "" },
+  });
+
   const navigate = useNavigate();
   const { login } = AuthService;
   const toast = useRef<Toast>(null);
   const [loading, setLoading] = useState(false);
-  const { handleLogin } =  useAuth(); 
+  const { handleLogin } = useAuth();
+
   const onSubmit = async (userLogin: IUserLogin) => {
     setLoading(true);
+
     try {
       const response = await login(userLogin);
+
       if (response.status === 200 && response.data) {
-        const authenticationResponse = response.data as AuthenticationResponse; 
-        handleLogin(authenticationResponse);             
+        const authenticationResponse = response.data as AuthenticationResponse;
+        handleLogin(authenticationResponse);
+
         toast.current?.show({
           severity: "success",
           summary: "Sucesso",
           detail: "Login efetuado com sucesso.",
           life: 3000,
         });
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
+
+        setTimeout(() => navigate("/"), 1000);
       } else {
         toast.current?.show({
           severity: "error",
@@ -56,18 +63,17 @@ export const LoginPage = () => {
       setLoading(false);
     }
   };
+
   return (
-    <div className="flex justify-content-center align-items-center min-h-screen p-4">
+    <div className="flex justify-content-center card-login-register min-h-screen p-4">
       <Toast ref={toast} />
-      <Card title="Login" className="w-full sm:w-20rem shadow-2">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-column gap-3"
-        >
-          <div>
-            <label htmlFor="username" className="block mb-2">
-              Usuário
-            </label>
+
+      <Card title="Login" className="w-full sm:w-20rem login-card">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-column gap-3">
+
+          <div className="input-wrapper">
+            <label htmlFor="username" className="form-label-centered mb-2">Usuário</label>
+
             <Controller
               name="username"
               control={control}
@@ -76,18 +82,17 @@ export const LoginPage = () => {
                 <InputText
                   id="username"
                   {...field}
-                  className={errors.username ? "p-invalid w-full" : "w-full"}
+                  className={errors.username ? "p-invalid" : ""}
                 />
               )}
             />
-            {errors.username && (
-              <small className="p-error">{errors.username.message}</small>
-            )}
+
+            {errors.username && <small className="p-error">{errors.username.message}</small>}
           </div>
-          <div>
-            <label htmlFor="password" className="block mb-2">
-              Senha
-            </label>
+
+          <div className="input-wrapper">
+            <label htmlFor="password" className="form-label-centered mb-2">Senha</label>
+
             <Controller
               name="password"
               control={control}
@@ -99,23 +104,23 @@ export const LoginPage = () => {
                   toggleMask
                   feedback={false}
                   className={errors.password ? "p-invalid w-full" : "w-full"}
-                  inputClassName="w-full"
+                  inputClassName="password-input"
                 />
               )}
             />
-            {errors.password && (
-              <small className="p-error">{errors.password.message}</small>
-            )}
+
+            {errors.password && <small className="p-error">{errors.password.message}</small>}
           </div>
+
           <Button
             type="submit"
             label="Entrar"
-            icon="pi pi-sign-in"
-            className="w-full"
+            className="w-full p-button-standard"
             loading={loading || isSubmitting}
             disabled={loading || isSubmitting}
           />
         </form>
+
         <div className="text-center mt-3">
           <small>
             Não tem uma conta?{" "}

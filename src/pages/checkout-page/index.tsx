@@ -126,8 +126,12 @@ const CheckoutPage = () => {
             <small>CEP: {address.zip}</small>
           </div>
         ))}
-      </div>
+         <button className="add-adress-checkout" onClick={() => navigate("/address")}>
+          Adicionar Endereço
+       </button>
 
+      </div>
+      
       <div className="checkout-box">
         <h5>Forma de envio</h5>
 
@@ -176,7 +180,7 @@ const CheckoutPage = () => {
 
           {products.map((item) => (
             <div key={item.id} className="checkout-item">
-              <img src={item.img as string} alt={item.name} />
+              <img src={item.urlImage} alt={item.name} />
               <div>
                 <strong>{item.name}</strong>
                 <p className="mb-0">Preço: R${item.price.toFixed(2)}</p>

@@ -1,12 +1,12 @@
 :root {
-    --color-primary-dark: #3b546e;
-    --color-primary-medium: #4a6785;
-    --color-accent-highlight: #a3c1e0;
-    --color-text-light: #ffffff;
-    --color-neutral-dark: #333333;
-    --color-neutral-light: #e0e0e0;
-    --color-neutral-lighter: #f8f8f8;
-    --color-surface-card: #ffffff;
-    --transition-standard: all 0.3s ease;
-    --font-family-standard: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --color-primary-dark: #3b546e;
+  --color-primary-medium: #4a6785;
+  --color-accent-highlight: #a3c1e0;
+  --color-text-light: #ffffff;
+  --color-neutral-dark: #333333;
+  --color-neutral-light: #e0e0e0;
+  --color-neutral-lighter: #f8f8f8;
+  --color-surface-card: #ffffff;
+  --transition-standard: all 0.3s ease;
+  --font-family-standard: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }

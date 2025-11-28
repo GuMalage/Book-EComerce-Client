@@ -14,17 +14,26 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <div className="produto-card">
-      <div className="position-relative">
+      <div className="image-container">
         <Link
           to={`/product/${product.id}`}
           className="link-produto"
           style={{ textDecoration: "none" }}
         >
-          <img
-            src={product.img as string}
-            className="card-img-top"
-            alt={`Capa do Livro: ${product.name}`}
-          />
+          {product.urlImage ? (
+            <img
+              src={product.urlImage}
+              alt={product.name}
+            />
+          ) : (
+            <i
+              className="pi pi-image placeholder-icon"
+              style={{
+                fontSize: "48px",
+                color: "#ccc"
+              }}
+            />
+          )}
         </Link>
       </div>
 
@@ -38,19 +47,17 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           {product.name}
         </Link>
 
-        {(product as any).author && (
-          <p className="text-muted">
-            {(product as any).author}
-          </p>
-        )}
+
+        <p className="text-muted">
+          {product.autorName}
+        </p>
+
+
 
         <p className="mb-1 mt-auto">
           <span className="preco">R$ {precoFormatado}</span>
         </p>
 
-        <div className="estrelas" aria-label="Avaliação 4 de 5 estrelas">
-          ★★★★☆
-        </div>
 
         <AddToCartProvider>
           {(addToCart) => (

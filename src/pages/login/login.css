@@ -1,0 +1,83 @@
+.card-login-register {
+    margin-top: 50px;
+}
+
+.login-card {
+    box-shadow: none;
+    border: none;
+}
+
+.p-card-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    color: #333;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #dcdcdc;
+    margin-bottom: 2rem;
+}
+
+.form-label-centered {
+    display: block;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.uniform-input {
+    width: 100% !important;
+    height: 48px;
+    padding: 0 0.75rem;
+    box-sizing: border-box;
+    border: 1px solid #dcdcdc !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+}
+
+.p-inputtext {
+    width: 100%;
+}
+
+.p-password {
+    width: 100%;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    display: block;
+}
+
+.p-inputtext.p-filled,
+.p-password input.p-filled,
+.p-inputtext:not(.p-disabled).p-filled,
+.p-password input:not(.p-disabled).p-filled {
+    background: #ffffff !important;
+    border-color: #dcdcdc !important;
+}
+
+.p-input-icon-left>.p-inputtext,
+.p-input-icon-right>.p-inputtext {
+    padding-left: 40px;
+}
+
+.p-password-panel {
+    display: none;
+}
+
+.p-button-standard {
+    margin-top: 30px;
+    background: #4a6785;
+    border: none;
+    color: white;
+    padding: 0.9rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    width: 100%;
+}
+
+.p-button-standard:hover {
+    background: #3b546e;
+}

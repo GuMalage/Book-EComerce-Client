@@ -8,12 +8,12 @@ export const toastRef = { current: null as Toast | null };
 
 
 function App() {
-    const toast = useRef<Toast>(null);
-    toastRef.current = toast.current;
+  const toast = useRef<Toast>(null);
+  toastRef.current = toast.current;
   return (
     <>
       <Toast ref={toastRef} />
-      <ConfirmDialog /> 
+      <ConfirmDialog />
       <AppRoutes />
     </>
   )

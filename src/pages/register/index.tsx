@@ -9,6 +9,7 @@ import { useRef, useState } from "react";
 import type { IUserRegister } from "@/commons/types";
 import AuthService from "@/services/Auth-service";
 import { Toast } from "primereact/toast";
+import "./register-page.css";
 
 export const RegisterPage = () => {
   const {
@@ -17,16 +18,18 @@ export const RegisterPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<IUserRegister>({
     defaultValues: { username: "", password: "", displayName: "" },
-  }); // Formulário controlado com React Hook Form
-  const { signup } = AuthService; // Método no authService que realiza uma requisição HTTP POST para /users na API
-  const [loading, setLoading] = useState(false); // Objeto que controla o estado da requisição HTTP
-  const navigate = useNavigate(); // Hook do React Touter para redirecionar o usuário para uma nova rota
-  const toast = useRef<Toast>(null); // Hook para possibilitar o uso do componente Toast para exibir as mensagens de sucesso ou erro.
+  });
 
-  const onSubmit = async (data: IUserRegister) => { // Função assíncrona para realizar o envio dos dados para API
+  const { signup } = AuthService;
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const toast = useRef<Toast>(null);
+
+  const onSubmit = async (data: IUserRegister) => {
     setLoading(true);
     try {
       const response = await signup(data);
+
       if (response.status === 200) {
         toast.current?.show({
           severity: "success",
@@ -34,9 +37,8 @@ export const RegisterPage = () => {
           detail: "Usuário cadastrado com sucesso.",
           life: 3000,
         });
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
+
+        setTimeout(() => navigate("/login"), 1000);
       } else {
         toast.current?.show({
           severity: "error",
@@ -56,13 +58,16 @@ export const RegisterPage = () => {
       setLoading(false);
     }
   };
+
   return (
-    <div className="flex justify-center items-start pt-30 px-4 bg-gray-100 dark:bg-gray-900">
+    <div className="flex justify-content-center min-h-screen p-4 card-login-register">
       <Toast ref={toast} />
-      <Card title="Registrar Conta" className="w-full max-w-md">
+
+      <Card title="Registrar Conta" className="w-full sm:w-20rem login-card">
         <form onSubmit={handleSubmit(onSubmit)} className="p-fluid space-y-4">
+
           <div>
-            <label className="block mb-2">Nome de Exibição</label>
+            <label className="form-label-centered">Nome de Exibição</label>
             <Controller
               name="displayName"
               control={control}
@@ -70,17 +75,22 @@ export const RegisterPage = () => {
               render={({ field }) => (
                 <InputText
                   {...field}
-                  className={classNames({ "p-invalid": errors.displayName })}
+                  className={classNames("uniform-input", {
+                    "p-invalid": errors.displayName,
+                  })}
                   placeholder="Ex: João das Neves"
                 />
               )}
             />
             {errors.displayName && (
-              <small className="p-error">{errors.displayName.message}</small>
+              <small className="p-error block text-center">
+                {errors.displayName.message}
+              </small>
             )}
           </div>
+
           <div>
-            <label className="block mb-2">Usuário</label>
+            <label className="form-label-centered">Usuário</label>
             <Controller
               name="username"
               control={control}
@@ -88,17 +98,22 @@ export const RegisterPage = () => {
               render={({ field }) => (
                 <InputText
                   {...field}
-                  className={classNames({ "p-invalid": errors.username })}
+                  className={classNames("uniform-input", {
+                    "p-invalid": errors.username,
+                  })}
                   placeholder="Ex: jsnow"
                 />
               )}
             />
             {errors.username && (
-              <small className="p-error">{errors.username.message}</small>
+              <small className="p-error block text-center">
+                {errors.username.message}
+              </small>
             )}
           </div>
+
           <div>
-            <label className="block mb-2">Senha</label>
+            <label className="form-label-centered">Senha</label>
             <Controller
               name="password"
               control={control}
@@ -111,21 +126,28 @@ export const RegisterPage = () => {
                   {...field}
                   toggleMask
                   feedback={false}
-                  className={classNames({ "p-invalid": errors.password })}
+                  className={classNames({
+                    "p-invalid": errors.password,
+                  })}
+                  inputClassName="uniform-input"
                 />
               )}
             />
             {errors.password && (
-              <small className="p-error">{errors.password.message}</small>
+              <small className="p-error block text-center">
+                {errors.password.message}
+              </small>
             )}
           </div>
+
           <Button
             type="submit"
             label="Registrar"
             loading={loading || isSubmitting}
             disabled={loading || isSubmitting}
-            className="w-full mt-3"
+            className="p-button-standard"
           />
+
           <div className="text-center mt-3">
             <small>
               Já tem uma conta?{" "}

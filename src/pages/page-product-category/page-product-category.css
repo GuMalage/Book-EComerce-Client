@@ -1,32 +1,20 @@
-/* ------------------------------------------
-   Container principal
-------------------------------------------- */
 .product-detail-page {
     max-width: 1200px;
+    margin: 100px auto 50px auto;
+    padding: 0 20px;
     font-family: var(--font-family-standard);
-    margin-top: 70px !important;
 }
 
-/* ------------------------------------------
-   Seção principal (imagem + informações)
-------------------------------------------- */
 .product-main-section {
     display: flex;
     gap: 40px;
     padding: 30px;
     background: var(--color-surface-card);
     border-radius: 12px;
-   
+
     align-items: flex-start;
 }
 
-.divider-product-page{
-    color: #a9a7a7;
-}
-
-/* ------------------------------------------
-   Coluna da imagem
-------------------------------------------- */
 .image-column {
     flex: 1;
     display: flex;
@@ -66,9 +54,6 @@
     border-color: var(--color-primary-medium);
 }
 
-/* ------------------------------------------
-   Coluna de informações
-------------------------------------------- */
 .info-column {
     flex: 1.4;
     display: flex;
@@ -103,28 +88,22 @@
     font-size: 1.3rem;
 }
 
-/* Linha divisória */
 .divider {
     border: none;
     height: 1px;
     background: var(--color-neutral-light);
 }
 
-/* Descrição */
 .product-description p {
     font-size: 1rem;
     color: var(--color-neutral-dark);
     line-height: 1.6;
 }
 
-/* ------------------------------------------
-   Botão Adicionar ao Carrinho
-------------------------------------------- */
-/* Botão Adicionar ao Carrinho (com nova paleta + centralizado) */
 .btn-adicionar-carrinho {
     width: 100%;
-    max-width: 380px; /* limite bonito */
-    margin: 20px auto 0 auto; /* Centraliza na coluna */
+    max-width: 380px;
+    margin: 20px auto 0 auto;
     display: block;
 
     padding: 15px;
@@ -141,26 +120,22 @@
 .btn-adicionar-carrinho:hover {
     background-color: #BAD0E0;
     color: #3D4A5C;
-    border-color: #BAD0E0;;
+    border-color: #BAD0E0;
+    ;
 }
 
-
-/* ------------------------------------------
-   Detalhes e avaliações
-------------------------------------------- */
 .details-reviews-container {
-    margin-top: 20px;
+    margin-top: 40px;
     padding: 30px;
-    padding-top: 0px;
     background: var(--color-surface-card);
     border-radius: 12px;
-   
+
 }
 
 .details-title h2 {
-    font-size: 1rem;
+    font-size: 1.6rem;
     color: var(--color-primary-dark);
-    padding-bottom: 40px;
+    margin-bottom: 10px;
 }
 
 .details-title hr {
@@ -173,10 +148,10 @@
     display: flex;
     gap: 40px;
     margin-top: 20px;
-    align-items: center;
 }
 
 .details-content {
+    flex: 2;
     color: var(--color-neutral-dark);
     line-height: 1.7;
     font-size: 1rem;
@@ -210,9 +185,6 @@
     margin-top: 5px;
 }
 
-/* ------------------------------------------
-   RESPONSIVIDADE
-------------------------------------------- */
 @media (max-width: 992px) {
     .product-main-section {
         flex-direction: column;
@@ -237,11 +209,6 @@
 }
 
 @media (max-width: 768px) {
-    .product-detail-page {
-        max-width: 1200px;
-        margin-top: 0px !important;
-        font-family: var(--font-family-standard);
-    }
     .sub-image {
         width: 75px;
         height: 75px;

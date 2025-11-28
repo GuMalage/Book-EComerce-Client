@@ -6,135 +6,142 @@ import { Toast } from "primereact/toast";
 import AddToCartProvider from "@/components/add-cart";
 import "./product-page.css";
 
-
 export const ProductPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<IProduct | null>(null);
-  const [loading, setLoading] = useState(true);
-  const toast = useRef<Toast>(null);
+    const { id } = useParams<{ id: string }>();
+    const [product, setProduct] = useState<IProduct | null>(null);
+    const [loading, setLoading] = useState(true);
+    const toast = useRef<Toast>(null);
 
-  const { findById } = ProductService;
+    const { findById } = ProductService;
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        if (!id) throw new Error("ID do produto não informado.");
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                if (!id) throw new Error("ID do produto não informado.");
 
-        const prodRes = await findById(Number(id));
+                const prodRes = await findById(Number(id));
 
-        if (prodRes?.status === 200 && prodRes.data) {
-          setProduct(prodRes.data as IProduct);
-        } else {
-          throw new Error("Produto não encontrado.");
-        }
-      } catch (err: any) {
-        toast.current?.show({
-          severity: "error",
-          summary: "Erro",
-          detail: err.message,
-          life: 3000,
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
+                if (prodRes?.status === 200 && prodRes.data) {
+                    setProduct(prodRes.data as IProduct);
+                } else {
+                    throw new Error("Produto não encontrado.");
+                }
+            } catch (err: any) {
+                toast.current?.show({
+                    severity: "error",
+                    summary: "Erro",
+                    detail: err.message,
+                    life: 3000,
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    loadData();
-  }, [id]);
+        loadData();
+    }, [id]);
 
-  if (loading) return <p className="loading-message">Carregando...</p>;
-  if (!product) return <p className="error-message">Produto não encontrado.</p>;
-  
-  const precoFormatado = product.price ? product.price.toFixed(2).replace(".", ",") : "0,00";
+    if (loading) return <p className="loading-message">Carregando...</p>;
+    if (!product) return <p className="error-message">Produto não encontrado.</p>;
 
-  return (
-    <>
-      <Toast ref={toast} />
+    const precoFormatado = product.price
+        ? product.price.toFixed(2).replace(".", ",")
+        : "0,00";
 
-      <AddToCartProvider>
-        {(addToCart) => (
-          <section className="produto-livro">
-            <div className="imagem-produto-livro">
-              <img id="imagemPrincipal" src={product.img as string} alt={product.name} />
+    return (
+        <>
+            <Toast ref={toast} />
 
-              <div className="subImagem-produto-livro">
-                {[1, 2, 3].map((i) => (
-                  <img
-                    key={i}
-                    className="subimagem"
-                    src={product.img as string}
-                    alt={product.name}
-                  />
-                ))}
-              </div>
-            </div>
+            <AddToCartProvider>
+                {(addToCart) => (
+                    <div className="product-detail-page">
+                        <section className="product-main-section">
+                            <div className="image-column">
+                                <img
+                                    id="imagemPrincipal"
+                                    className="main-image"
+                                    src={product.urlImage}
+                                    alt={product.name}
+                                />
 
-            <div className="informacoes-livro">
-              <div>
-                <small className="status-estoque">Em Estoque</small>
+                                <div className="sub-images">
+                                    {[1, 2, 3].map((i) => (
+                                        <img
+                                            key={i}
+                                            className="sub-image"
+                                            src={product.urlImage}
+                                            alt={product.name}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
 
-                <div className="nome-produto-livro">
-                  <h1>{product.name}</h1>
-                </div>
+                            <div className="info-column">
+                                <div className="product-details">
+                                    <small className="product-status">Em Estoque</small>
 
-                {product.author && (
-                    <p className="autor-livro">
-                        Por: <strong>{product.author}</strong>
-                    </p>
+                                    <div className="product-name">
+                                        <h1>{product.name}</h1>
+                                    </div>
+
+                                    {product.autorName && (
+                                        <p className="product-author">
+                                            Por: <strong>{product.autorName}</strong>
+                                        </p>
+                                    )}
+
+                                    <div className="product-price">
+                                        <p className="price-value">R$ {precoFormatado}</p>
+                                    </div>
+
+                                    <div className="rating-stars">
+                                        ★★★★★ (4.5/5)
+                                    </div>
+
+                                    <hr className="divider-product-page" />
+
+                                    <div className="product-description">
+                                        <p>{product.description}</p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    className="btn-adicionar-carrinho"
+                                    onClick={() => addToCart(product)}
+                                >
+                                    Adicionar ao Carrinho
+                                </button>
+
+                            </div>
+                        </section>
+
+                        <section className="details-reviews-container">
+                            <div className="details-title">
+                                <h2>Detalhes do Produto e Avaliações</h2>
+
+                            </div>
+
+                            <div className="details-reviews">
+                                <div className="details-content">
+                                    <p>{product.longDescription}</p>
+                                </div>
+
+                                <div className="review-summary">
+                                    <h3>
+                                        4.5<span>/5</span>
+                                    </h3>
+                                    <div className="rating-stars">★★★★★</div>
+                                    <p className="review-count">
+                                        Baseado em 125 Avaliações
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
                 )}
-
-                <div className="preco-livro">
-                  <p className="preco-cor">R$ {precoFormatado}</p>
-                </div>
-                
-                <div className="estrelas-avaliacao">★★★★★ (4.5/5)</div>
-                <hr className="divider" />
-
-                <div className="conteudo-livro">
-                  <p>{product.description}</p>
-                </div>
-              </div>
-
-              <div className="acoes-livro">
-                <button
-                  className="btn-adicionar-carrinho"
-                  onClick={() => addToCart(product)}
-                >
-                  Adicionar ao Carrinho
-                </button>
-              </div>
-
-              <hr className="divider" />
-            </div>
-          </section>
-        )}
-      </AddToCartProvider>
-
-      <section className="descricao-avaliacao-container">
-        <div className="descricao-titulo">
-          <h2>Detalhes do Livro e Avaliações</h2>
-          <hr />
-        </div>
-
-        <div className="descricao-avaliacao">
-          <div className="descricao">
-            <p>{product.description}</p>
-          </div>
-
-          <div className="avaliacao">
-            <div className="avaliacao-principal">
-              <h3>
-                4.5<span>/5</span>
-              </h3>
-              <div className="estrelas">★★★★★</div>
-              <p className="qnt-avaliacoes">Baseado em 125 Avaliações</p>
-            </div>
-          
-          </div>
-        </div>
-      </section>
-    </>
-  );
+            </AddToCartProvider>
+        </>
+    );
 };
 
 export default ProductPage;

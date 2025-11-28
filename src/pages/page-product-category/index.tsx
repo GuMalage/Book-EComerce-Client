@@ -1,41 +1,45 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useParams } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import ProductService from "@/services/Product-service";
 import CategoryService from "@/services/Category-service";
 import type { IProduct, ICategory } from "@/commons/types";
 import { ProductCard } from "@/components/product-card";
-import { Controller, useForm } from "react-hook-form";
-import { Dropdown } from "primereact/dropdown";
-import "./product-list.css";
+import "./page-product-category.css";
 
-export const ProductListPage = () => {
+export const CategoryProductsPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const categoryId = Number(id);
+
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [category, setCategory] = useState<ICategory | null>(null);
   const [loading, setLoading] = useState(true);
+
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
 
-  const { findAll: findAllProducts } = ProductService;
-  const { findAll: findAllCategories } = CategoryService;
-
   const toast = useRef<Toast>(null);
 
-  const { control, watch } = useForm();
-  const category = watch("category");
+  const { findAll: findAllProducts } = ProductService;
+  const { findById: findCategoryById } = CategoryService;
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const [prodRes, catRes] = await Promise.all([
           findAllProducts(),
-          findAllCategories(),
+          findCategoryById(categoryId)
         ]);
 
         if (prodRes.status === 200 && Array.isArray(prodRes.data)) {
-          setProducts(prodRes.data);
+          const filtered = prodRes.data.filter(
+            (p) => p.category.id === categoryId
+          );
+          setProducts(filtered);
         }
-        if (catRes.data && Array.isArray(catRes.data)) {
-          setCategories([{ id: 0, name: "Todas as categorias" }, ...catRes.data]);
+
+        if (catRes.data) {
+          setCategory(catRes.data as ICategory);
         }
       } catch {
         toast.current?.show({
@@ -50,60 +54,31 @@ export const ProductListPage = () => {
     };
 
     loadData();
-  }, []);
+  }, [categoryId]);
 
-
-  const filteredProducts =
-    !category || category.id === 0
-      ? products
-      : products.filter((p) => p.category.id === category.id);
-
-
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const totalPages = Math.ceil(products.length / productsPerPage);
   const currentPageSafe = Math.min(currentPage, totalPages || 1);
   const indexOfLastProduct = currentPageSafe * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const paginatedData = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [category]);
+  const paginatedData = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <main className="product-page">
       <Toast ref={toast} />
 
-      <div className="category-section">
-        <label className="categoria-label">Categoria</label>
-        <Controller
-          name="category"
-          control={control}
-          render={({ field }) => (
-            <Dropdown
-              {...field}
-              options={categories}
-              optionLabel="name"
-              placeholder="Selecione uma categoria"
-              className="categoria-dropdown"
-              value={field.value}
-              onChange={(e) => field.onChange(e.value)}
-            />
-          )}
-        />
-      </div>
-
-      <h2 className="title">Lista de Produtos Encontrados</h2>
-
+      <h2 className="title">
+        {category ? `Produtos da categoria: ${category.name}` : "Carregando categoria..."}
+      </h2>
 
       {loading ? (
         <p className="text-center">Carregando...</p>
-      ) : filteredProducts.length === 0 ? (
+      ) : products.length === 0 ? (
         <p className="text-center text-muted">
           Nenhum produto encontrado para esta categoria.
         </p>
       ) : (
         <>
-          <section >
+          <section>
             <div className="cards-posicionamento" id="produtosContainer">
               {paginatedData.map((product) => (
                 <div key={product.id}>
@@ -144,6 +119,5 @@ export const ProductListPage = () => {
         </>
       )}
     </main>
-
   );
 };

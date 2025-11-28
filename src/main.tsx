@@ -2,22 +2,18 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-
 import { PrimeReactProvider } from "primereact/api";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
-import "primereact/resources/themes/lara-light-indigo/theme.css"; 
-import "primereact/resources/primereact.min.css"; 
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "primereact/resources/themes/lara-light-blue/theme.css";
-
-
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext.tsx";
 
 const themeId = "theme-link";
-const themeHref =
-  "https://unpkg.com/primereact/resources/themes/lara-light-blue/theme.css";
+const themeHref ="https://unpkg.com/primereact/resources/themes/lara-light-blue/theme.css";
 const link = document.createElement("link");
 link.id = themeId;
 link.rel = "stylesheet";
@@ -28,11 +24,11 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <PrimeReactProvider>
-       
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-   
+
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+
       </PrimeReactProvider>
     </BrowserRouter>
   </StrictMode>

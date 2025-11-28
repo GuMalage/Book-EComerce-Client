@@ -76,7 +76,7 @@ export function AddressPage() {
 
   return (
     <div className="container py-4">
-      <div className="address-form-card"> 
+      <div className="address-form-card">
         <h2 className="text-center mb-4">Cadastro de Endereço</h2>
 
         <Form>
@@ -142,7 +142,7 @@ export function AddressPage() {
           )}
 
           <Button
-            variant="danger" 
+            variant="danger"
             disabled={pendingApiCall}
             onClick={onClickSave}
             className="w-100 mt-3"
