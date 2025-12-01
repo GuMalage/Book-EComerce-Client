@@ -6,7 +6,7 @@ import type { IOrder, IProduct, IAddress } from "@/commons/types";
 import { Toast } from "primereact/toast";
 import "./checkout-page.css";
 
-const CheckoutPage = () => {
+export const CheckoutPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [addresses, setAddresses] = useState<IAddress[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
@@ -14,7 +14,6 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("PIX");
 
   const [shippingType, setShippingType] = useState("");
-  const [shippingPrice, setShippingPrice] = useState(0);
 
   const toast = useRef<Toast>(null);
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ const CheckoutPage = () => {
     0
   );
 
-  const finalTotal = subtotal + shippingPrice;
+  const finalTotal = subtotal;
 
   const handleOrder = async () => {
     if (!selectedAddress) {
@@ -116,9 +115,8 @@ const CheckoutPage = () => {
           <div
             key={address.id ?? Math.random()}
             onClick={() => address.id && handleSelectAddress(address.id)}
-            className={`address-item ${
-              selectedAddress === address.id ? "selected" : ""
-            }`}
+            className={`address-item ${selectedAddress === address.id ? "selected" : ""
+              }`}
           >
             <p className="m-0">
               {address.street}, {address.houseNumber} — {address.city}
@@ -126,12 +124,12 @@ const CheckoutPage = () => {
             <small>CEP: {address.zip}</small>
           </div>
         ))}
-         <button className="add-adress-checkout" onClick={() => navigate("/address")}>
+        <button className="add-adress-checkout" onClick={() => navigate("/address")}>
           Adicionar Endereço
-       </button>
+        </button>
 
       </div>
-      
+
       <div className="checkout-box">
         <h5>Forma de envio</h5>
 
@@ -144,16 +142,12 @@ const CheckoutPage = () => {
             onChange={(e) => {
               const value = e.target.value;
               setShippingType(value);
-
-              if (value === "PAC") setShippingPrice(10);
-              else if (value === "SEDEX") setShippingPrice(20);
-              else if (value === "RETIRADA") setShippingPrice(0);
             }}
           >
             <option value="">Selecione</option>
-            <option value="PAC">PAC — R$ 10,00 (7 dias)</option>
-            <option value="SEDEX">SEDEX — R$ 20,00 (3 dias)</option>
-            <option value="RETIRADA">Retirada no local — R$ 0,00</option>
+            <option value="PAC">PAC (7 dias)</option>
+            <option value="SEDEX">SEDEX (3 dias)</option>
+            <option value="RETIRADA">Retirada no local</option>
           </select>
         )}
       </div>
@@ -197,11 +191,6 @@ const CheckoutPage = () => {
         <div className="summary-row">
           <span>Subtotal:</span>
           <span>R${subtotal.toFixed(2)}</span>
-        </div>
-
-        <div className="summary-row">
-          <span>Frete:</span>
-          <span>R${shippingPrice.toFixed(2)}</span>
         </div>
 
         <hr />

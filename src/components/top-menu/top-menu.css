@@ -126,6 +126,7 @@
   transform: translateY(8px);
   transition: 0.2s ease;
   z-index: 20;
+  flex-direction: column;
 }
 
 .submenu-items li a{

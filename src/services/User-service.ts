@@ -3,8 +3,6 @@ import type { IUserLogin } from "@/commons/types";
 
 const userURL = "/users";
 
-
-
 const updateUser = async (user: IUserLogin): Promise<any> => {
     try {
         return await api.put(`${userURL}`, user);

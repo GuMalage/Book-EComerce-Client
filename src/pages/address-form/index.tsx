@@ -63,7 +63,7 @@ export function AddressPage() {
 
       if (response && (response.status === 200 || response.status === 201)) {
         setApiSuccess(true);
-        setTimeout(() => navigate("/home"), 2000);
+        setTimeout(() => navigate("/profile"), 2000);
       } else {
         throw new Error("Falha ao salvar");
       }

@@ -1,6 +1,6 @@
 import "./about-us.css";
 
-export default function AboutUs() {
+export const AboutUs = () => {
   return (
     <div className="about-wrapper">
 

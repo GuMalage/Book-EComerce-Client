@@ -26,7 +26,7 @@ const TopMenu: React.FC = () => {
   }
 
   const aboutUs = () => {
-    navigate("about-us");
+    navigate("/about-us");
   }
 
   const toggleMenu = () => {

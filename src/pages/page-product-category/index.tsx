@@ -67,7 +67,7 @@ export const CategoryProductsPage = () => {
       <Toast ref={toast} />
 
       <h2 className="title">
-        {category ? `Produtos da categoria: ${category.name}` : "Carregando categoria..."}
+        {category ? ` ${category.name}` : "Carregando categoria..."}
       </h2>
 
       {loading ? (

@@ -6,7 +6,7 @@ import OrderService from "@/services/Order-service";
 import { Link } from "react-router-dom";
 import "./profile-page.css";
 
-export function ProfilePage() {
+export const ProfilePage = () => {
     const [user, setUser] = useState<IUserLogin | null>(null);
     const [addresses, setAddresses] = useState<IAddress[]>([]);
     const [orders, setOrders] = useState<IOrderResponse[]>([]);
@@ -161,3 +161,4 @@ export function ProfilePage() {
         </div>
     );
 }
+export default ProfilePage;

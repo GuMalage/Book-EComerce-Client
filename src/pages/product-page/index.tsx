@@ -125,7 +125,6 @@ export const ProductPage = () => {
                                 <div className="details-content">
                                     <p>{product.longDescription}</p>
                                 </div>
-
                                 <div className="review-summary">
                                     <h3>
                                         4.5<span>/5</span>
