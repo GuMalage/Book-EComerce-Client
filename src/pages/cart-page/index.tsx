@@ -126,9 +126,20 @@ export function CartPage() {
     price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
   const handleCheckout = () => {
-    if (AuthService.isAuthenticated()) {
+    
+    if(cart.length === 0){
+      toastRef.current?.show({
+          severity: "info",
+          summary: "Alerta",
+          detail: "O Carrinho está vazio, adicione itens para finalizar o pedido",
+          life: 2500,
+        });
+        navigate("/home")
+    }
+    else if(AuthService.isAuthenticated()){
       navigate("/checkout");
-    } else {
+    } 
+    else {
       localStorage.setItem("redirectAfterLogin", "/checkout");
       navigate("/login");
     }
