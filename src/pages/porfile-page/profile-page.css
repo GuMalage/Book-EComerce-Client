@@ -219,6 +219,162 @@ strong {
     object-fit: cover;
 }
 
+.orders-filters {
+    display: flex;
+
+    justify-content: center;
+    align-items: flex-end;
+
+    gap: 1.5rem;
+
+    flex-wrap: wrap;
+
+    margin: 2rem 0 2.5rem 0;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-size: 1rem;
+    font-weight: 600;
+
+    color: #1e293b;
+}
+
+.filter-group .form-select {
+    width: 180px;
+    height: 48px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+
+    padding: 0 1rem;
+
+    font-size: 1rem;
+
+    background-color: #ffffff;
+    color: #1e293b;
+
+    transition: all 0.2s ease;
+}
+
+.filter-group .form-select:focus {
+    outline: none;
+
+    border-color: #3b82f6;
+
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.filter-group .p-calendar {
+    width: 250px;
+
+    display: flex;
+    align-items: stretch;
+}
+
+.filter-group .p-calendar .p-inputtext {
+    height: 48px;
+    border-radius: 14px 0 0 14px !important;
+
+    border: 1px solid #cbd5e1 !important;
+
+    padding-left: 1rem;
+
+    font-size: 1rem;
+
+    display: flex;
+    align-items: center;
+}
+
+.filter-group .p-calendar .p-datepicker-trigger {
+    height: 48px !important;
+    width: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+    padding: 0;
+
+    border-radius: 0 14px 14px 0 !important;
+}
+
+
+.filter-group .p-datepicker-trigger:hover {
+    background-color: #2563eb;
+}
+
+.clear-filter-btn {
+    height: 48px;
+
+    padding: 0 1.4rem;
+
+    border: none;
+    border-radius: 12px;
+
+    background-color: #3f5877;
+    color: white;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+
+    margin-top: 0.5rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: block;
+}
+
+.clear-filter-btn:hover {
+    background-color: #334866;
+}
+
+/* Botão do ícone calendário */
+.filter-group .p-datepicker-trigger {
+    background-color: #3f5877 !important;
+
+    border: 1px solid #3f5877 !important;
+
+    color: white !important;
+
+    border-radius: 0 14px 14px 0;
+
+    transition: 0.2s ease;
+}
+
+/* Hover */
+.filter-group .p-datepicker-trigger:hover {
+    background-color: #334866 !important;
+    border-color: #334866 !important;
+}
+
+/* Ícone */
+.filter-group .p-datepicker-trigger .pi {
+    color: white !important;
+}
+
+/* Input calendário */
+.filter-group .p-calendar input {
+    border-radius: 14px 0 0 14px !important;
+
+    border: 1px solid #cbd5e1 !important;
+
+    height: 48px;
+
+    padding-left: 1rem;
+}
+
 
 @media (max-width: 1200px) {
     .profile-layout {
@@ -263,6 +419,20 @@ strong {
 
     .orders-grid {
         grid-template-columns: 1fr;
+    }
+
+     .orders-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-group .form-select,
+    .filter-group .p-calendar {
+        width: 100%;
+    }
+
+    .clear-filter-btn {
+        width: 100%;
     }
 }
 

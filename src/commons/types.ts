@@ -1,3 +1,5 @@
+import type { OrderStatusType } from "@/commons/enum";
+
 export interface IUserRegister {
     displayName: string;
     username: string;
@@ -65,6 +67,7 @@ export interface IOrder {
     paymentType: String ;
     shippingType: String ;
     addressId: number ;
+    orderStatus:OrderStatusType;
 }
 
 export interface IOrderResponse {
@@ -73,6 +76,7 @@ export interface IOrderResponse {
     itemsList: {productId: number, productPrice: number, quantity: number, productName: String, totalPriceItems: number, urlImage: string}[];
     addressId: number,
     totalPrice: number;
+    orderStatus:OrderStatusType;
 }
 
 export interface ICartItem {

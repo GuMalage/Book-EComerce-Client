@@ -51,14 +51,40 @@ const save = async (order: IOrder): Promise<any> => {
       data: null
     };
   }
+
 };
 
+const update = async (order: IOrder | IOrderResponse): Promise<any> => {
+  try {
+
+    const response = await api.put(
+      `${ordersURL}/${order.id}`,
+      order
+    );
+
+    return {
+      httpStatus: response.status,
+      data: response.data
+    };
+
+  } catch (error: any) {
+
+    return {
+      httpStatus: error.response?.status || 500,
+      data: null
+    };
+
+  }
+};
 
 const OrderService = {
   findAll,
   findAllByUser,
   findById,
   save,
+  update
 };
+
+
 
 export default OrderService;

@@ -3,19 +3,21 @@ import OrderService from "@/services/Order-service";
 import AddressService from "@/services/Address-service";
 import { useNavigate } from "react-router-dom";
 import type { IOrder, IProduct, IAddress } from "@/commons/types";
-import { Toast } from "primereact/toast";
 import "./checkout-page.css";
+import { OrderStatus } from "@/commons/enum";
+import { Toast } from "primereact/toast";
 
 export const CheckoutPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [addresses, setAddresses] = useState<IAddress[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
+  const toast = useRef<Toast>(null);
 
   const [paymentMethod, setPaymentMethod] = useState("PIX");
 
   const [shippingType, setShippingType] = useState("");
 
-  const toast = useRef<Toast>(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,6 +72,7 @@ export const CheckoutPage = () => {
       paymentType: paymentMethod.toUpperCase(),
       shippingType,
       addressId: Number(selectedAddress),
+      orderStatus: OrderStatus.PROCESSING
     };
 
     const response = await OrderService.save(order);

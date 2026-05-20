@@ -12,7 +12,7 @@ function App() {
   toastRef.current = toast.current;
   return (
     <>
-      <Toast ref={toastRef} />
+      <Toast ref={toast} />
       <ConfirmDialog />
       <AppRoutes />
     </>

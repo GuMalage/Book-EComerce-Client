@@ -39,7 +39,6 @@ export const HomePage = () => {
         const prodRes = await findAllProducts();
 
         if (prodRes.status === 200 && Array.isArray(prodRes.data)) {
-          // Aqui os produtos seriam, idealmente, livros.
           setProducts(prodRes.data);
         }
       } catch (err) {
@@ -51,8 +50,6 @@ export const HomePage = () => {
 
     loadData();
   }, []);
-
-
 
 
   return (
