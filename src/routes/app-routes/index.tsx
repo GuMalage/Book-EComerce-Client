@@ -13,6 +13,7 @@ import { CheckoutPage }  from "@/pages/checkout-page";
 import { ProfilePage } from "@/pages/porfile-page/indes";
 import { CategoryProductsPage } from "@/pages/page-product-category";
 import { AboutUs }  from "@/pages/about-us";
+import { AdminDashboardPage } from "@/pages/admin-page";
 
 
 export function AppRoutes() {
@@ -31,11 +32,17 @@ export function AppRoutes() {
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="*" element={<NotFound />} />
 
-        <Route element={<RequireAuth />}>
+        <Route element={<RequireAuth allowedRoles={['ROLE_USER']}/>}>
 
           <Route path="/address" element={<AddressPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={['ROLE_ADMIN']}/>}>
+
+          <Route path="/adminDeshboard" element={<AdminDashboardPage />} />
           
         </Route>
       </Route>

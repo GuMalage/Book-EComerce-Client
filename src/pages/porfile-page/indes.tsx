@@ -1,20 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import type { IAddress, IUserLogin, IOrderResponse } from "@/commons/types";
+import type { IAddress, AuthenticatedUser, IOrderResponse } from "@/commons/types";
 import AddressService from "@/services/Address-service";
 import OrderService from "@/services/Order-service";
 import { Link } from "react-router-dom";
 import "./profile-page.css";
 import {
     OrderStatus,
-    type OrderStatusType
 } from "@/commons/enum";
 import { Toast } from "primereact/toast";
-import { confirmDialog } from "primereact/confirmdialog";
 import { Calendar } from "primereact/calendar";
 
 export const ProfilePage = () => {
-    const [user, setUser] = useState<IUserLogin | null>(null);
+    const [user, setUser] = useState<AuthenticatedUser | null>(null);
     const [addresses, setAddresses] = useState<IAddress[]>([]);
     const [orders, setOrders] = useState<IOrderResponse[]>([]);
     const [loading, setLoading] = useState(true);
@@ -26,7 +24,6 @@ export const ProfilePage = () => {
 
     const [currentTab, setCurrentTab] = useState<"orders" | "addresses">("orders");
 
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -35,18 +32,37 @@ export const ProfilePage = () => {
 
     useEffect(() => {
         if (user) {
+            // Verifica estritamente se o usuário logado possui a role ROLE_USER
+            const isUser = user.authorities?.some((auth) => auth.authority === "ROLE_USER");
+            
+            if (!isUser) {
+                // Redireciona para home ou página de acesso negado se não for ROLE_USER
+                navigate("/"); 
+                return;
+            }
+
             loadAddresses();
             loadOrders();
         }
-    }, [user]);
+    }, [user, navigate]);
 
     const loadUser = () => {
         setLoading(true);
-
         const storedUser = localStorage.getItem("user");
 
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser) as AuthenticatedUser;
+            setUser(parsedUser);
+            
+            // Validação imediata após o parse do localStorage
+            const isUser = parsedUser.authorities?.some((auth) => auth.authority === "ROLE_USER");
+            if (!isUser) {
+                navigate("/");
+                return;
+            }
+        } else {
+            // Se não houver usuário no localStorage, redireciona para o login
+            navigate("/login");
         }
 
         setLoading(false);
@@ -73,82 +89,8 @@ export const ProfilePage = () => {
             console.error("Erro ao carregar pedidos:", error);
         }
     };
-    const handleChangeStatus = async (
-        order: IOrderResponse,
-        newStatus: OrderStatusType
-    ) => {
-
-        confirmDialog({
-            header: "Alterar status do pedido",
-
-            message: (
-                <div style={{ lineHeight: 1.6 }}>
-                    Deseja realmente alterar o status do pedido para{" "}
-                    <strong>{newStatus}</strong>?
-                </div>
-            ),
-
-            icon: "pi pi-exclamation-triangle",
-
-            acceptLabel: "Confirmar",
-            rejectLabel: "Cancelar",
-
-            acceptClassName: "p-button-success",
-            rejectClassName: "p-button-text",
-
-            accept: async () => {
-
-                try {
-
-                    const updatedOrder = {
-                        ...order,
-                        orderStatus: newStatus
-                    };
-
-                    await OrderService.update(updatedOrder);
-
-                    setOrders((prevOrders) =>
-                        prevOrders.map((o) =>
-                            o.id === order.id
-                                ? { ...o, orderStatus: newStatus }
-                                : o
-                        )
-                    );
-
-                    toast.current?.show({
-                        severity: "success",
-                        summary: "Status atualizado",
-                        detail: `Pedido atualizado para ${newStatus}.`,
-                        life: 3000,
-                    });
-
-                } catch (error) {
-
-                    console.error(error);
-
-                    toast.current?.show({
-                        severity: "error",
-                        summary: "Erro",
-                        detail: "Não foi possível atualizar o pedido.",
-                        life: 3000,
-                    });
-                }
-            },
-
-            reject: () => {
-
-                toast.current?.show({
-                    severity: "info",
-                    summary: "Cancelado",
-                    detail: "A alteração do pedido foi cancelada.",
-                    life: 2500,
-                });
-            }
-        });
-    };
 
     const filteredOrders = orders.filter((order) => {
-
         const orderDate = new Date(order.dateOrder);
 
         const matchesStatus =
@@ -167,53 +109,50 @@ export const ProfilePage = () => {
         );
     });
 
+    // Se ainda estiver carregando ou o usuário não for válido, exibe o feedback visual
+    if (loading || !user || !user.authorities?.some((auth) => auth.authority === "ROLE_USER")) {
+        return <div className="spinner">Carregando...</div>;
+    }
+
     return (
         <div className="profile-layout">
+            <Toast ref={toast} />
+            
             <aside className="profile-sidebar">
-                {!loading && user && (
-                    <>
-                        <h2>Perfil</h2>
-                        <p><strong>Nome:</strong> {user.username}</p>
+                <h2>Perfil</h2>
+                <p><strong>Nome:</strong> {user.username}</p>
 
-                        <div className="menu">
-                            <button
-                                className={currentTab === "orders" ? "active" : ""}
-                                onClick={() => setCurrentTab("orders")}
-                            >
-                                Pedidos
-                            </button>
+                <div className="menu">
+                    <button
+                        className={currentTab === "orders" ? "active" : ""}
+                        onClick={() => setCurrentTab("orders")}
+                    >
+                        Pedidos
+                    </button>
 
-                            <button
-                                className={currentTab === "addresses" ? "active" : ""}
-                                onClick={() => setCurrentTab("addresses")}
-                            >
-                                Endereços
-                            </button>
-                        </div>
-                    </>
-                )}
+                    <button
+                        className={currentTab === "addresses" ? "active" : ""}
+                        onClick={() => setCurrentTab("addresses")}
+                    >
+                        Endereços
+                    </button>
+                </div>
             </aside>
 
             <main className="profile-content">
-                {loading && <div className="spinner">Carregando...</div>}
-
-
-
-                {!loading && currentTab === "orders" && (
+                {currentTab === "orders" && (
                     <div>
                         <h2>Histórico de Pedidos</h2>
                         <div className="orders-filters">
 
                             <div className="filter-group">
                                 <label>Status</label>
-
                                 <select
                                     className="form-select"
                                     value={statusFilter}
                                     onChange={(e) => setStatusFilter(e.target.value)}
                                 >
                                     <option value="">Todos</option>
-
                                     {Object.values(OrderStatus).map((status) => (
                                         <option key={status} value={status}>
                                             {status}
@@ -224,7 +163,6 @@ export const ProfilePage = () => {
 
                             <div className="filter-group">
                                 <label>Data inicial</label>
-
                                 <Calendar
                                     value={startDate}
                                     onChange={(e) => setStartDate(e.value as Date)}
@@ -235,7 +173,6 @@ export const ProfilePage = () => {
 
                             <div className="filter-group">
                                 <label>Data final</label>
-
                                 <Calendar
                                     value={endDate}
                                     onChange={(e) => setEndDate(e.value as Date)}
@@ -261,32 +198,21 @@ export const ProfilePage = () => {
                             <div className="orders-grid">
                                 {filteredOrders.map(order => (
                                     <div key={order.id} className="order-card">
-                                        <p><strong>Data do Pedido:</strong> {new Date(order.dateOrder).toLocaleDateString("pt-BR")}</p>
-                                        <p><strong>Total:</strong> R${order.totalPrice}</p>
-
                                         <p>
-                                            <strong>Status:</strong>
+                                            <strong>Data do Pedido:</strong>{" "}
+                                            {new Date(order.dateOrder).toLocaleDateString("pt-BR", {
+                                                day: "2-digit",
+                                                month: "2-digit",
+                                                year: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit"
+                                            })}
                                         </p>
-
-                                        <select
-                                            className="form-select"
-                                            value={order.orderStatus}
-                                            onChange={(e) =>
-                                                handleChangeStatus(
-                                                    order,
-                                                    e.target.value as OrderStatusType
-                                                )
-                                            }
-                                        >
-                                            {Object.values(OrderStatus).map((statusValue) => (
-                                                <option
-                                                    key={statusValue}
-                                                    value={statusValue}
-                                                >
-                                                    {statusValue}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        <p><strong>Total:</strong> R${order.totalPrice}</p>
+                                        
+                                        <p>
+                                            <strong>Status:</strong> <span>{order.orderStatus}</span>
+                                        </p>
 
                                         <strong>Itens:</strong>
                                         <ul>
@@ -298,7 +224,7 @@ export const ProfilePage = () => {
                                                         style={{ textDecoration: "none" }}
                                                     >
                                                         <div className="card-img-wrapper">
-                                                            <img src={item.urlImage} className="card-img-top" />
+                                                            <img src={item.urlImage} className="card-img-top"/>
                                                         </div>
 
                                                         <strong className="product-link-name">
@@ -309,8 +235,6 @@ export const ProfilePage = () => {
 
                                                     <strong>Preço:</strong> R${item.productPrice.toFixed(2)}<br />
                                                     <strong>Qtd:</strong> {item.quantity}
-
-
                                                 </li>
                                             ))}
                                         </ul>
@@ -322,7 +246,8 @@ export const ProfilePage = () => {
                         )}
                     </div>
                 )}
-                {!loading && currentTab === "addresses" && (
+
+                {currentTab === "addresses" && (
                     <div>
                         <h2>Meus Endereços</h2>
 
@@ -347,4 +272,5 @@ export const ProfilePage = () => {
         </div>
     );
 }
+
 export default ProfilePage;

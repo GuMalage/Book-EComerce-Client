@@ -112,6 +112,29 @@ export const RegisterPage = () => {
             )}
           </div>
 
+           <div>
+            <label className="form-label-centered">Email</label>
+            <Controller
+              name="email"
+              control={control}
+              rules={{ required: "Campo obrigatório" }}
+              render={({ field }) => (
+                <InputText
+                  {...field}
+                  className={classNames("uniform-input", {
+                    "p-invalid": errors.username,
+                  })}
+                  placeholder="Ex: jsnow@gmail"
+                />
+              )}
+            />
+            {errors.username && (
+              <small className="p-error block text-center">
+                {errors.username.message}
+              </small>
+            )}
+          </div>
+
           <div>
             <label className="form-label-centered">Senha</label>
             <Controller

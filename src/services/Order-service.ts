@@ -3,9 +3,9 @@ import type { IOrder, IOrderResponse } from "@/commons/types";
 
 const ordersURL = "/order";
 
-const findAll = async (): Promise<IOrder[]> => {
+const findAll = async (): Promise<IOrderResponse[]> => {
   try {
-    const response = await api.get(ordersURL);
+    const response = await api.get(`${ordersURL}/all`)
     return response.data;
   } catch (error: any) {
     console.error("Erro ao buscar pedidos:", error);
@@ -22,6 +22,7 @@ const findAllByUser = async (): Promise<IOrderResponse[]> => {
     return [];
   }
 };
+
 
 
 const findById = async (id: number): Promise<any> => {

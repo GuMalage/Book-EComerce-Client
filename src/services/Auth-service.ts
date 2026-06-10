@@ -26,10 +26,10 @@ const login = async (user: IUserLogin): Promise<IResponse> => {
   let response = {} as IResponse;
   try {
     const data = await api.post("/login", user);
-
     const token = data.data?.token;
+
     if (token) {
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", JSON.stringify(token));
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
 
@@ -37,7 +37,7 @@ const login = async (user: IUserLogin): Promise<IResponse> => {
       status: 200,
       success: true,
       message: "Login bem-sucedido",
-      data: data.data,
+      data: data.data, 
     };
   } catch (err: any) {
     response = {
@@ -50,6 +50,14 @@ const login = async (user: IUserLogin): Promise<IResponse> => {
   return response;
 };
 
+
+const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user"); 
+  delete api.defaults.headers.common["Authorization"];
+};
+
+// Verifica se existe um token válido e não expirado
 const isAuthenticated = (): boolean => {
   const token = localStorage.getItem("token");
   if (!token) return false;
@@ -58,16 +66,11 @@ const isAuthenticated = (): boolean => {
     const [, payloadBase64] = token.split(".");
     const payload = JSON.parse(atob(payloadBase64));
     const exp = payload.exp * 1000;
+    
     return Date.now() < exp;
   } catch {
     return false;
   }
-};
-
-
-const logout = () => {
-  localStorage.removeItem("token");
-  delete api.defaults.headers.common["Authorization"];
 };
 
 const AuthService = {

@@ -26,43 +26,84 @@ export const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const { handleLogin } = useAuth();
 
-  const onSubmit = async (userLogin: IUserLogin) => {
-    setLoading(true);
+const onSubmit = async (userLogin: IUserLogin) => {
+  setLoading(true);
 
-    try {
-      const response = await login(userLogin);
+  try {
+    const response = await login(userLogin);
 
-      if (response.status === 200 && response.data) {
-        const authenticationResponse = response.data as AuthenticationResponse;
-        handleLogin(authenticationResponse);
+    if (response.status === 200 && response.data) {
+      const authenticationResponse = response.data as AuthenticationResponse;
+      handleLogin(authenticationResponse);
 
-        toast.current?.show({
-          severity: "success",
-          summary: "Sucesso",
-          detail: "Login efetuado com sucesso.",
-          life: 3000,
-        });
+      toast.current?.show({
+        severity: "success",
+        summary: "Sucesso",
+        detail: "Login efetuado com sucesso.",
+        life: 3000,
+      });
 
-        setTimeout(() => navigate("/"), 1000);
-      } else {
-        toast.current?.show({
-          severity: "error",
-          summary: "Erro",
-          detail: "Falha ao efetuar login.",
-          life: 3000,
-        });
-      }
-    } catch {
+      // 1. Tenta extrair a lista de permissões de onde o Spring costuma mandar
+      const resAny = authenticationResponse as any;
+      const authorities = 
+        resAny.user?.authorities || 
+        resAny.usuario?.authorities || 
+        resAny.authorities || 
+        resAny.userAuthorities || 
+        resAny.user?.roles ||
+        resAny.roles ||
+        [];
+
+      // 2. Checa se o "ROLE_ADMIN" existe na lista, tratando se vier String ou Objeto
+      const isAdmin = Array.isArray(authorities) && authorities.some((auth: any) => {
+        if (!auth) return false;
+        if (typeof auth === "string") {
+          return auth === "ROLE_ADMIN";
+        }
+        return auth.authority === "ROLE_ADMIN" || auth.role === "ROLE_ADMIN" || auth.nome === "ROLE_ADMIN";
+      });
+
+      // 3. Redirecionamento
+      setTimeout(() => {
+        if (isAdmin) {
+          navigate("/adminDeshboard");
+        } else {
+          navigate("/");
+        }
+      }, 1000);
+
+    } else {
       toast.current?.show({
         severity: "error",
         summary: "Erro",
         detail: "Falha ao efetuar login.",
         life: 3000,
       });
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error: any) {
+    console.error("Erro capturado no login:", error);
+
+    const backendMessage = error.response?.data?.message || error.response?.data;
+
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      toast.current?.show({
+        severity: "error",
+        summary: "Acesso Negado",
+        detail: typeof backendMessage === "string" ? backendMessage : "Usuário/senha incorretos ou conta inativa.",
+        life: 5000,
+      });
+    } else {
+      toast.current?.show({
+        severity: "error",
+        summary: "Erro",
+        detail: "Ocorreu uma falha de comunicação com o servidor.",
+        life: 3000,
+      });
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex justify-content-center card-login-register min-h-screen p-4">
@@ -133,3 +174,5 @@ export const LoginPage = () => {
     </div>
   );
 };
+
+export default LoginPage;

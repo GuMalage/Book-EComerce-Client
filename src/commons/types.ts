@@ -4,6 +4,7 @@ export interface IUserRegister {
     displayName: string;
     username: string;
     password: string;
+    email: string;
 }
 
 export interface IResponse {
@@ -13,19 +14,18 @@ export interface IResponse {
     data?: object
 }
 
-export interface IUserLogin {
-    username: string;
-    password: string;
-}
-
-export interface Authorities {
-  authority: string;
+export interface IAuthority {
+  id?:number,
+  authority: string; 
 }
 
 export interface AuthenticatedUser {
-  displayName: string;
+  id?: number;
   username: string;
-  authorities: Authorities[];
+  displayName: string;
+  email: string;
+  active: boolean;
+  authorities: IAuthority[]; 
 }
 
 export interface AuthenticationResponse {
@@ -36,6 +36,21 @@ export interface AuthenticationResponse {
 export  interface  ICategory {
     id?:  number;
     name:  string;
+}
+
+export interface IUserLogin {
+    username: string;
+    password: string; 
+}
+
+export interface IUserStatus{
+  id?:number,
+   active: boolean;
+}
+
+export interface IUserAuthorities{
+  id?:number,
+  userAuthorities: IAuthority[]; 
 }
 
 export interface IProduct {
@@ -70,6 +85,10 @@ export interface IOrder {
     orderStatus:OrderStatusType;
 }
 
+export interface IUser{
+  username: string;
+}
+
 export interface IOrderResponse {
     id?: number;
     dateOrder: Date;
@@ -77,6 +96,7 @@ export interface IOrderResponse {
     addressId: number,
     totalPrice: number;
     orderStatus:OrderStatusType;
+    username: IUser
 }
 
 export interface ICartItem {

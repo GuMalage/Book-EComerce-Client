@@ -1,12 +1,26 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react"; 
 import { useAuth } from "@/context/hooks/use-auth";
 import logo from "@/assets/logo_transparent.png";
 import "./top-menu.css";
 import { FaShoppingCart, FaUser, FaSignOutAlt, FaBars } from "react-icons/fa";
+import type { AuthenticatedUser } from "@/commons/types"; 
 
 const TopMenu: React.FC = () => {
   const navigate = useNavigate();
   const { authenticated, handleLogout } = useAuth();
+  
+
+  const [user, setUser] = useState<AuthenticatedUser | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      setUser(null); 
+    }
+  }, [authenticated]);
 
   const logout = () => {
     handleLogout();
@@ -15,19 +29,23 @@ const TopMenu: React.FC = () => {
 
   const cart = () => {
     navigate("/cart");
-  }
+  };
 
   const login = () => {
     navigate("/login");
-  }
+  };
 
   const profile = () => {
     navigate("/profile");
-  }
+  };
+
+  const adminDashboard = () => {
+    navigate("/adminDeshboard");
+  };
 
   const aboutUs = () => {
     navigate("/about-us");
-  }
+  };
 
   const toggleMenu = () => {
     const menu = document.querySelector(".navbar-div-menu");
@@ -41,14 +59,12 @@ const TopMenu: React.FC = () => {
 
   return (
     <section id="navbar-rool">
-
       <div className="navbar-navbar-cor">
         <div className="navbar-navbar">
-
-
+          
           <div className="navbar-div-menu">
             <div className="logo">
-              <a onClick={() => navigate("/home")}>
+              <a onClick={() => navigate("/home")} style={{ cursor: 'pointer' }}>
                 <img src={logo} alt="Logo Loyalty" />
               </a>
             </div>
@@ -78,38 +94,45 @@ const TopMenu: React.FC = () => {
             <FaBars />
           </button>
 
-
           <div className="icones-nav">
+          {authenticated && user?.authorities?.some(auth => auth.authority === 'ROLE_USER') && (
             <a className="icone-item" href="#" onClick={cart}>
               <FaShoppingCart className="icone" />
               <span>Carrinho</span>
-            </a>
+            </a>)}
 
             {!authenticated && (
               <a className="icone-item" href="#" onClick={login}>
                 <FaUser className="icone" />
                 <span>Login</span>
-              </a>)}
+              </a>
+            )}
 
-            {authenticated && (
+    
+            {authenticated && user?.authorities?.some(auth => auth.authority === 'ROLE_USER') && (
               <a className="icone-item" href="#" onClick={profile}>
                 <FaUser className="icone" />
                 <span>Perfil</span>
-              </a>)}
+              </a>
+            )}
+
+            {authenticated && user?.authorities?.some(auth => auth.authority === 'ROLE_ADMIN') && (
+              <a className="icone-item" href="#" onClick={adminDashboard}>
+                <FaUser className="icone" />
+                <span>Painel Admin</span>
+              </a>
+            )}
 
             {authenticated && (
-
               <a className="icone-item" href="#" onClick={logout}>
                 <FaSignOutAlt className="icone" />
                 <span>Sair</span>
-              </a>)}
+              </a>
+            )}
           </div>
 
         </div>
       </div>
-
-
-
     </section>
   );
 };
