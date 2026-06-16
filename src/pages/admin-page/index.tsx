@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import type { AuthenticatedUser, IAuthority, IOrderResponse, IUserAuthorities, IUserStatus } from "@/commons/types";
 import OrderService from "@/services/Order-service";
@@ -7,6 +7,7 @@ import { OrderStatus, type OrderStatusType } from "@/commons/enum";
 import { Toast } from "primereact/toast";
 import { confirmDialog } from "primereact/confirmdialog";
 import { Calendar } from "primereact/calendar";
+import { Button } from "primereact/button";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
 import "./admin-dashboard.css";
@@ -19,6 +20,7 @@ export function AdminDashboardPage() {
     const [clientsList, setClientsList] = useState<any[]>([]);
     const [allUsersList, setAllUsersList] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const toast = useRef<Toast>(null);
 
     const [statusFilter, setStatusFilter] = useState<string>("");
@@ -28,6 +30,7 @@ export function AdminDashboardPage() {
 
     const [userActiveFilter, setUserActiveFilter] = useState<string>("all");
     const [userRoleFilter, setUserRoleFilter] = useState<string>("all");
+    const [image, setImage] = useState<File | null>(null);
 
     const [currentTab, setCurrentTab] = useState<"indicators" | "all-orders" | "access-management">("indicators");
 
@@ -141,7 +144,7 @@ export function AdminDashboardPage() {
 
     const handleToggleUserActive = async (targetUser: any) => {
         const nextState = !targetUser.active;
-        
+
         confirmDialog({
             header: `${nextState ? "Ativar" : "Desativar"} Usuário`,
             message: `Tem certeza que deseja ${nextState ? "ativar" : "desativar"} o acesso de ${targetUser.username}?`,
@@ -153,19 +156,19 @@ export function AdminDashboardPage() {
                 try {
                     const payload: IUserStatus = {
                         id: targetUser.id,
-                        active: nextState 
+                        active: nextState
                     };
 
                     await UserService.updateStatusUser(payload);
-                    
-                    setAllUsersList((prev) => 
+
+                    setAllUsersList((prev) =>
                         prev.map((u) => (u.id === targetUser.id ? { ...u, active: nextState } : u))
                     );
 
                     if (targetUser.id === user?.id) {
                         setUser(prev => prev ? { ...prev, active: nextState } : null);
                     }
-                    
+
                     toast.current?.show({
                         severity: "success",
                         summary: "Sucesso",
@@ -174,11 +177,11 @@ export function AdminDashboardPage() {
                     });
                 } catch (error) {
                     console.error("Erro ao alterar status:", error);
-                    toast.current?.show({ 
-                        severity: "error", 
-                        summary: "Erro", 
-                        detail: "Erro ao alterar o status do usuário no servidor.", 
-                        life: 3000 
+                    toast.current?.show({
+                        severity: "error",
+                        summary: "Erro",
+                        detail: "Erro ao alterar o status do usuário no servidor.",
+                        life: 3000
                     });
                 }
             }
@@ -202,10 +205,10 @@ export function AdminDashboardPage() {
                     let updatedAuthorities: IAuthority[] = currentAuths.map((auth: any) => ({
                         authority: String(auth.authority)
                     }));
-                    
+
                     if (isAdmin) {
                         updatedAuthorities = updatedAuthorities.filter((auth) => auth.authority !== "ROLE_ADMIN");
-                        
+
                         const hasUserRole = updatedAuthorities.some((auth) => auth.authority === "ROLE_USER");
                         if (updatedAuthorities.length === 0 || !hasUserRole) {
                             updatedAuthorities.push({ authority: "ROLE_USER" });
@@ -223,20 +226,20 @@ export function AdminDashboardPage() {
                     };
 
                     await UserService.updatePermissionUser(payload);
-                    
-                    setAllUsersList((prev) => 
+
+                    setAllUsersList((prev) =>
                         prev.map((u) => (u.id === targetUser.id ? { ...u, userAuthorities: updatedAuthorities } : u))
                     );
 
                     if (user && targetUser.id === user.id) {
-                        const updatedUser: AuthenticatedUser = { 
-                            ...user, 
+                        const updatedUser: AuthenticatedUser = {
+                            ...user,
                             username: user.username,
-                            userAuthorities: updatedAuthorities 
+                            userAuthorities: updatedAuthorities
                         } as any;
                         setUser(updatedUser);
                         localStorage.setItem("user", JSON.stringify(updatedUser));
-                        
+
                         if (isAdmin) {
                             navigate("/profile");
                             return;
@@ -251,15 +254,73 @@ export function AdminDashboardPage() {
                     });
                 } catch (error) {
                     console.error("Erro ao alterar permissões:", error);
-                    toast.current?.show({ 
-                        severity: "error", 
-                        summary: "Erro", 
-                        detail: "Erro ao alterar as permissões do usuário no servidor.", 
-                        life: 3000 
+                    toast.current?.show({
+                        severity: "error",
+                        summary: "Erro",
+                        detail: "Erro ao alterar as permissões do usuário no servidor.",
+                        life: 3000
                     });
                 }
             }
         });
+    };
+
+    const handleReciptOrder = async (data: IOrderResponse) => {
+        if (!image) {
+            toast.current?.show({
+                severity: "warn",
+                summary: "Aviso",
+                detail: "Por favor, selecione uma imagem antes de salvar.",
+                life: 3000,
+            });
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const formData = new FormData();
+            formData.append("image", image);
+
+            const blob = new Blob([JSON.stringify(data)], {
+                type: "application/json",
+            });
+            formData.append("order", blob);
+
+            const response = await OrderService.saveAndUpload(formData);
+
+            if (response && (response.status === 200 || response.success)) {
+                toast.current?.show({
+                    severity: "success",
+                    summary: "Sucesso",
+                    detail: "Comprovante enviado com sucesso.",
+                    life: 3000,
+                });
+
+                await loadAllOrders();
+                setImage(null);
+            } else {
+                toast.current?.show({
+                    severity: "error",
+                    summary: "Erro",
+                    detail: "Não foi possível salvar o registro.",
+                    life: 3000,
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            toast.current?.show({
+                severity: "error",
+                summary: "Erro",
+                detail: "Erro inesperado ao salvar o registro.",
+                life: 3000,
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const onFileChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setImage(event.target.files ? event.target.files[0] : null);
     };
 
     const filteredOrders = orders.filter((order) => {
@@ -267,7 +328,7 @@ export function AdminDashboardPage() {
         const matchesStatus = !statusFilter || order.orderStatus === statusFilter;
         const matchesStartDate = !startDate || orderDate >= startDate;
         const matchesEndDate = !endDate || orderDate <= endDate;
-        
+
         const currentOrderUser = typeof order.username === 'object' ? order.username?.username : order.username;
         const matchesClient = !clientFilter || currentOrderUser === clientFilter;
 
@@ -277,12 +338,12 @@ export function AdminDashboardPage() {
     const filteredUsers = allUsersList.filter((u) => {
         const matchesStatus =
             userActiveFilter === "all" ? true :
-            userActiveFilter === "active" ? u.active === true : u.active === false;
+                userActiveFilter === "active" ? u.active === true : u.active === false;
 
         const isUserAdmin = u.userAuthorities?.some((auth: any) => auth && auth.authority === "ROLE_ADMIN");
-        const matchesRole = 
+        const matchesRole =
             userRoleFilter === "all" ? true :
-            userRoleFilter === "admin" ? isUserAdmin === true : isUserAdmin === false;
+                userRoleFilter === "admin" ? isUserAdmin === true : isUserAdmin === false;
 
         return matchesStatus && matchesRole;
     });
@@ -329,7 +390,7 @@ export function AdminDashboardPage() {
                 <h2>Painel Admin</h2>
                 <p>Olá, <strong>{user?.displayName || user?.username || "Administrador"}</strong></p>
                 <div className="menu">
-                     <button
+                    <button
                         className={currentTab === "indicators" ? "active" : ""}
                         onClick={() => setCurrentTab("indicators")}
                     >
@@ -341,7 +402,7 @@ export function AdminDashboardPage() {
                     >
                         Todos os Pedidos
                     </button>
-                   
+
                     <button
                         className={currentTab === "access-management" ? "active" : ""}
                         onClick={() => setCurrentTab("access-management")}
@@ -375,7 +436,7 @@ export function AdminDashboardPage() {
                                 <label>Data Final</label>
                                 <Calendar value={endDate} onChange={(e) => setEndDate(e.value as Date)} dateFormat="dd/mm/yy" showIcon />
                             </div>
-                        
+
                             <div className="filter-group">
                                 <label>Status</label>
                                 <select className="form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
@@ -426,6 +487,45 @@ export function AdminDashboardPage() {
                                                     ))}
                                                 </ul>
                                             </details>
+
+                                         
+                                            <div className="receipt-upload-container">
+                                                <label className="receipt-upload-label">
+                                                    <i className="pi pi-paperclip" style={{ marginRight: '6px', fontSize: '0.9rem', color: 'var(--color-primary-medium)' }}></i>
+                                                    Anexar Nota Fiscal / Recibo:
+                                                </label>
+
+                                                <input
+                                                    className="receipt-file-input"
+                                                    type="file"
+                                                    name="image"
+                                                    accept="image/*"
+                                                    onChange={onFileChangeHandler}
+                                                />
+
+                                                {order?.imageName && (
+                                                    <div className="receipt-preview-box">
+                                                        <img
+                                                            className="receipt-img"
+                                                            src={`http://localhost:9000/commons/${order.imageName}`}
+                                                            alt="Recibo do Pedido"
+                                                        />
+                                                        <div>
+                                                            <small className="block">Nota Fiscal anexada</small>
+                                                            <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b' }}>Clique para expandir</span>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                <Button
+                                                    type="button"
+                                                    label="Salvar Nota Fiscal"
+                                                    icon="pi pi-upload"
+                                                    className="receipt-submit-btn p-button-sm"
+                                                    loading={isSubmitting}
+                                                    onClick={() => handleReciptOrder(order)}
+                                                />
+                                            </div>
                                         </div>
                                     );
                                 })}
@@ -496,11 +596,11 @@ export function AdminDashboardPage() {
                                 </select>
                             </div>
 
-                            <button 
-                                className="clear-filter-btn" 
-                                onClick={() => { 
-                                    setUserActiveFilter("all"); 
-                                    setUserRoleFilter("all"); 
+                            <button
+                                className="clear-filter-btn"
+                                onClick={() => {
+                                    setUserActiveFilter("all");
+                                    setUserRoleFilter("all");
                                 }}
                             >
                                 Limpar

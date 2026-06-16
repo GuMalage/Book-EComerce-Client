@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios.ts";
-import type { IOrder, IOrderResponse } from "@/commons/types";
+import type { IOrder, IOrderResponse, IResponse } from "@/commons/types";
 
 const ordersURL = "/order";
 
@@ -78,12 +78,35 @@ const update = async (order: IOrder | IOrderResponse): Promise<any> => {
   }
 };
 
+
+const saveAndUpload = async (formData: FormData): Promise<IResponse> => {
+  let response = {} as IResponse;
+  try {
+    const data = await api.put(`${ordersURL}/reciptUpdate`, formData);
+    response = {
+      status: 200,
+      success: true,
+      message: "Produto salvo com sucesso!",
+      data: data.data,
+    };
+  } catch (err: any) {
+    response = {
+      status: err.response.status,
+      success: false,
+      message: "Falha ao salvar produto",
+      data: err.response.data,
+    };
+  }
+  return response;
+};
+
 const OrderService = {
   findAll,
   findAllByUser,
   findById,
   save,
-  update
+  update,
+  saveAndUpload
 };
 
 

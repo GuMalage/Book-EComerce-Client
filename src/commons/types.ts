@@ -19,6 +19,13 @@ export interface IAuthority {
   authority: string; 
 }
 
+export interface IResponse {
+  status?: number;
+  success?: boolean;
+  message?: string;
+  data?: object
+}
+
 export interface AuthenticatedUser {
   id?: number;
   username: string;
@@ -83,6 +90,8 @@ export interface IOrder {
     shippingType: String ;
     addressId: number ;
     orderStatus:OrderStatusType;
+    imageName?: string;
+    contentType?: string;
 }
 
 export interface IUser{
@@ -96,7 +105,9 @@ export interface IOrderResponse {
     addressId: number,
     totalPrice: number;
     orderStatus:OrderStatusType;
-    username: IUser
+    username: IUser;
+    imageName?: string;
+    contentType?: string;
 }
 
 export interface ICartItem {
