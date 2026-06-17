@@ -284,7 +284,9 @@ export function AdminDashboardPage() {
             const blob = new Blob([JSON.stringify(data)], {
                 type: "application/json",
             });
-            formData.append("order", blob);
+
+
+            formData.append("order", blob, "order.json");
 
             const response = await OrderService.saveAndUpload(formData);
 
@@ -488,7 +490,7 @@ export function AdminDashboardPage() {
                                                 </ul>
                                             </details>
 
-                                         
+
                                             <div className="receipt-upload-container">
                                                 <label className="receipt-upload-label">
                                                     <i className="pi pi-paperclip" style={{ marginRight: '6px', fontSize: '0.9rem', color: 'var(--color-primary-medium)' }}></i>
@@ -501,29 +503,27 @@ export function AdminDashboardPage() {
                                                     name="image"
                                                     accept="image/*"
                                                     onChange={onFileChangeHandler}
+                                                    disabled={!!order?.imageName} // Desabilita o input se já houver nota
                                                 />
 
                                                 {order?.imageName && (
-                                                    <div className="receipt-preview-box">
-                                                        <img
-                                                            className="receipt-img"
-                                                            src={`http://localhost:9000/commons/${order.imageName}`}
-                                                            alt="Recibo do Pedido"
-                                                        />
+                                                    <div className="receipt-status-box">
+                                                        <i className="pi pi-check-circle"></i>
                                                         <div>
-                                                            <small className="block">Nota Fiscal anexada</small>
-                                                            <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b' }}>Clique para expandir</span>
+                                                            <small className="block">Nota Fiscal já lançada</small>
+                                                            <span>O documento encontra-se salvo no sistema.</span>
                                                         </div>
                                                     </div>
                                                 )}
 
                                                 <Button
                                                     type="button"
-                                                    label="Salvar Nota Fiscal"
-                                                    icon="pi pi-upload"
+                                                    label={order?.imageName ? "Nota Fiscal Salva" : "Salvar Nota Fiscal"}
+                                                    icon={order?.imageName ? "pi pi-check" : "pi pi-upload"}
                                                     className="receipt-submit-btn p-button-sm"
                                                     loading={isSubmitting}
                                                     onClick={() => handleReciptOrder(order)}
+                                                    disabled={!!order?.imageName || isSubmitting} // Fica inativo se já houver imagem
                                                 />
                                             </div>
                                         </div>

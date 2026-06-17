@@ -340,7 +340,7 @@ strong {
     background-color: #334866;
 }
 
-/* Botão do ícone calendário */
+
 .filter-group .p-datepicker-trigger {
     background-color: #3f5877 !important;
 
@@ -353,18 +353,17 @@ strong {
     transition: 0.2s ease;
 }
 
-/* Hover */
 .filter-group .p-datepicker-trigger:hover {
     background-color: #334866 !important;
     border-color: #334866 !important;
 }
 
-/* Ícone */
+
 .filter-group .p-datepicker-trigger .pi {
     color: white !important;
 }
 
-/* Input calendário */
+
 .filter-group .p-calendar input {
     border-radius: 14px 0 0 14px !important;
 
@@ -376,13 +375,49 @@ strong {
 }
 
 
+.download-invoice-btn {
+    width: 100%;
+    padding: 12px 18px;
+    background-color: #4a6785 !important;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-standard);
+    font-family: var(--font-family-standard);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    margin-top: 15px;
+}
+
+.download-invoice-btn:hover {
+    background-color: #3b546e  !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
+}
+
+.download-invoice-btn:active {
+    transform: scale(0.97);
+}
+
+.download-invoice-btn:disabled {
+    background-color: var(--color-neutral-light);
+    color: var(--color-neutral-dark);
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
 @media (max-width: 1200px) {
     .profile-layout {
         gap: 20px;
     }
 }
 
-/* Tablets (<= 1024px) */
 @media (max-width: 1024px) {
     .profile-layout {
         flex-direction: column;

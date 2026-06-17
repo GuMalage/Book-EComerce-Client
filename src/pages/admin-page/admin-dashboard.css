@@ -483,7 +483,8 @@ hr {
 }
 
 .action-btn.toggler.activate:hover {
-    background-color: #215d24;
+     --color-primary-dark: #3b546e;
+    
 }
 
 .action-btn.role-toggle.promote {
@@ -512,6 +513,7 @@ hr {
     opacity: 0.6;
 }
 
+
 .receipt-upload-container {
     display: flex;
     flex-direction: column;
@@ -519,12 +521,13 @@ hr {
     justify-content: center;
     gap: 15px;              
     width: 100%;
-    padding: 20px;
+    padding: 25px;
     background: var(--color-neutral-lighter); 
     border: 2px dashed var(--color-neutral-light);
     border-radius: 12px;      
     box-sizing: border-box;
-    margin-top: 15px;
+    margin-top: 20px;
+    transition: var(--transition-standard);
 }
 
 .receipt-upload-label {
@@ -537,7 +540,6 @@ hr {
     text-align: center;
 }
 
-
 .receipt-file-input {
     width: 100%;
     max-width: 280px;
@@ -547,7 +549,6 @@ hr {
     display: block;
     margin: 0 auto;
 }
-
 
 .receipt-file-input::file-selector-button {
     padding: 8px 14px;
@@ -561,58 +562,56 @@ hr {
     transition: var(--transition-standard);
 }
 
-.receipt-file-input::file-selector-button:hover {
+.receipt-file-input::file-selector-button:hover:not(:disabled) {
     background: var(--color-neutral-light);
     color: var(--color-primary-dark);
 }
 
-.receipt-preview-box {
+.receipt-file-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.receipt-status-box {
     display: flex;
-    flex-direction: column;
-    align-items: center;    
-    justify-content: center;
-    gap: 8px;
-    text-align: center;
-    padding: 12px;
-    background: var(--color-surface-card);
-    border: 1px solid var(--color-neutral-light);
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--color-success-light);
+    border: 1px solid rgba(46, 125, 50, 0.2);
     border-radius: 8px;
     width: 100%;
-    max-width: 240px;
+    max-width: 280px;
     box-shadow: var(--shadow-subtle); 
 }
 
-.receipt-img {
-    max-width: 100%;
-    max-height: 120px;
-    object-fit: contain;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: var(--transition-standard);
+.receipt-status-box .pi {
+    color: var(--color-success-base);
+    font-size: 1.2rem;
 }
 
-.receipt-img:hover {
-    transform: scale(1.03);
-}
-
-
-.receipt-preview-box small {
+.receipt-status-box small {
     color: var(--color-success-base); 
     font-weight: 700;
+    font-size: 0.9rem;
+    display: block;
 }
 
-.receipt-preview-box span {
+.receipt-status-box span {
     color: var(--color-neutral-dark);
-    opacity: 0.6; 
+    opacity: 0.8; 
+    font-size: 0.75rem;
+    display: block;
 }
 
 .receipt-submit-btn {
     width: 100%;
-    max-width: 240px;
+    max-width: 280px;
     height: 44px;
     justify-content: center; 
-    background-color: var(--color-success-base) !important;
-    border: 1px solid var(--color-success-base) !important;
+    background-color: var(--color-primary-medium) !important;
+    border: 1px solid var(--color-primary-medium) !important;
     color: var(--color-text-light) !important; 
     border-radius: 8px !important;
     font-size: 0.9rem !important;
@@ -621,15 +620,17 @@ hr {
 }
 
 .receipt-submit-btn:hover:not(:disabled) {
-    background-color: #215d24 !important;
-    border-color: #215d24 !important;
+    background-color: var(--color-primary-dark) !important;
+    border-color: var(--color-primary-dark) !important;
 }
 
+/* Estado Inativo (Disabled) quando já houver nota lançada */
 .receipt-submit-btn:disabled {
-    background-color: var(--color-neutral-lighter) !important;
+    background-color: var(--color-neutral-light) !important;
     color: #94a3b8 !important;
     border: 1px solid var(--color-neutral-light) !important;
-    opacity: 0.6;
+    cursor: not-allowed !important;
+    opacity: 0.7;
 }
 
 
@@ -703,12 +704,12 @@ hr {
         width: 100%;
     }
 
-      .receipt-upload-container {
+    .receipt-upload-container {
         padding: 15px;
     }
     
     .receipt-file-input,
-    .receipt-preview-box,
+    .receipt-status-box,
     .receipt-submit-btn {
         width: 100%;         
         max-width: 100%;

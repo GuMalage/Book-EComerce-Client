@@ -1,6 +1,7 @@
 import { api } from "@/lib/axios.ts";
 import type { IOrder, IOrderResponse, IResponse } from "@/commons/types";
 
+
 const ordersURL = "/order";
 
 const findAll = async (): Promise<IOrderResponse[]> => {
@@ -55,6 +56,66 @@ const save = async (order: IOrder): Promise<any> => {
 
 };
 
+const saveAndUpload = async (formData: FormData): Promise<IResponse> => {
+  let response = {} as IResponse;
+  try {
+    const data = await api.put(`${ordersURL}/reciptUpdate`, formData);
+    
+    response = {
+      status: 200,
+      success: true,
+      message: "Produto salvo com sucesso!",
+      data: data.data,
+    };
+  } catch (err: any) {
+    response = {
+      status: err.response?.status || 500,
+      success: false,
+      message: "Falha ao salvar produto",
+      data: err.response?.data,
+    };
+  }
+  return response;
+};
+
+const downloadFile = async (id: number): Promise<any> => {
+  try {
+    // É fundamental usar responseType: "blob" para que o axios trate a resposta como arquivo binário
+    const response = await api.get(`${ordersURL}/download/${id}`, {
+      responseType: "blob"
+    });
+
+    // Tenta capturar o nome original do arquivo enviado pelo cabeçalho do Java
+    const contentDisposition = response.headers["content-disposition"];
+    let fileName = `comprovante-pedido-${id}.jpg`; // Nome padrão caso falhe
+
+    if (contentDisposition) {
+      const fileNameMatch = contentDisposition.match(/filename=(.+)/);
+      if (fileNameMatch && fileNameMatch[1]) {
+        // Decodifica o nome (ex: remove os %20 de espaços)
+        fileName = decodeURIComponent(fileNameMatch[1]);
+      }
+    }
+
+    const blob = new Blob([response.data], { type: response.headers["content-type"] });
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    
+    link.href = downloadUrl;
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
+    
+    // Limpa a memória e remove o elemento criado
+    link.remove();
+    window.URL.revokeObjectURL(downloadUrl);
+
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+};
+
 const update = async (order: IOrder | IOrderResponse): Promise<any> => {
   try {
 
@@ -78,37 +139,17 @@ const update = async (order: IOrder | IOrderResponse): Promise<any> => {
   }
 };
 
-
-const saveAndUpload = async (formData: FormData): Promise<IResponse> => {
-  let response = {} as IResponse;
-  try {
-    const data = await api.put(`${ordersURL}/reciptUpdate`, formData);
-    response = {
-      status: 200,
-      success: true,
-      message: "Produto salvo com sucesso!",
-      data: data.data,
-    };
-  } catch (err: any) {
-    response = {
-      status: err.response.status,
-      success: false,
-      message: "Falha ao salvar produto",
-      data: err.response.data,
-    };
-  }
-  return response;
-};
-
 const OrderService = {
   findAll,
   findAllByUser,
   findById,
   save,
   update,
-  saveAndUpload
+  saveAndUpload,
+  downloadFile
 };
 
 
+console.log("EXPORTANDO:", OrderService);
 
 export default OrderService;
