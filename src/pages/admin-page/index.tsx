@@ -501,9 +501,9 @@ export function AdminDashboardPage() {
                                                     className="receipt-file-input"
                                                     type="file"
                                                     name="image"
-                                                    accept="image/*"
+                                                    accept="image/*,.pdf"
                                                     onChange={onFileChangeHandler}
-                                                    disabled={!!order?.imageName} // Desabilita o input se já houver nota
+                                                    disabled={!!order?.imageName} 
                                                 />
 
                                                 {order?.imageName && (
@@ -523,7 +523,7 @@ export function AdminDashboardPage() {
                                                     className="receipt-submit-btn p-button-sm"
                                                     loading={isSubmitting}
                                                     onClick={() => handleReciptOrder(order)}
-                                                    disabled={!!order?.imageName || isSubmitting} // Fica inativo se já houver imagem
+                                                    disabled={!!order?.imageName || isSubmitting}
                                                 />
                                             </div>
                                         </div>

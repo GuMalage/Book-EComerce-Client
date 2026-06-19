@@ -80,24 +80,24 @@ const saveAndUpload = async (formData: FormData): Promise<IResponse> => {
 
 const downloadFile = async (id: number): Promise<any> => {
   try {
-    // É fundamental usar responseType: "blob" para que o axios trate a resposta como arquivo binário
     const response = await api.get(`${ordersURL}/download/${id}`, {
       responseType: "blob"
     });
 
-    // Tenta capturar o nome original do arquivo enviado pelo cabeçalho do Java
-    const contentDisposition = response.headers["content-disposition"];
-    let fileName = `comprovante-pedido-${id}.jpg`; // Nome padrão caso falhe
+    const contentType = response.headers["content-type"] || "";
+    
+    const isPdf = contentType.toLowerCase().includes("pdf");
+    let fileName = `comprovante-pedido-${id}.${isPdf ? "pdf" : "jpg"}`; 
 
+    const contentDisposition = response.headers["content-disposition"];
     if (contentDisposition) {
-      const fileNameMatch = contentDisposition.match(/filename=(.+)/);
+      const fileNameMatch = contentDisposition.match(/filename=["']?([^"']+)["']?/);
       if (fileNameMatch && fileNameMatch[1]) {
-        // Decodifica o nome (ex: remove os %20 de espaços)
         fileName = decodeURIComponent(fileNameMatch[1]);
       }
     }
 
-    const blob = new Blob([response.data], { type: response.headers["content-type"] });
+    const blob = new Blob([response.data], { type: contentType });
     const downloadUrl = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     
@@ -105,8 +105,7 @@ const downloadFile = async (id: number): Promise<any> => {
     link.setAttribute("download", fileName);
     document.body.appendChild(link);
     link.click();
-    
-    // Limpa a memória e remove o elemento criado
+
     link.remove();
     window.URL.revokeObjectURL(downloadUrl);
 
